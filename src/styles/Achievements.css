@@ -1,0 +1,318 @@
+/* Achievements.css - Consistent with Home & Certificates Pages */
+
+/* Import same CSS variables */
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #7c3aed;
+  --accent: #10b981;
+  --featured: #f59e0b;
+  --dark-bg: #0f172a;
+  --card-bg: rgba(30, 41, 59, 0.95);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: rgba(148, 163, 184, 0.15);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.2);
+  --radius-xl: 24px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+}
+
+/* Base Styles - Same as other pages */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--dark-bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Navigation and Hero sections use same styles as Certificates.css */
+
+/* Featured Section */
+.featured-section {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(30, 41, 59, 0.6) 100%);
+}
+
+.featured-count {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--featured);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-xs);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.achievement-card.featured {
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+}
+
+.achievement-card.featured:hover {
+  border-color: var(--featured);
+  box-shadow: 0 20px 40px rgba(245, 158, 11, 0.2);
+}
+
+.achievement-image-container {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.achievement-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.achievement-card:hover .achievement-image {
+  transform: scale(1.05);
+}
+
+.achievement-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--featured) 0%, #fbbf24 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-icon {
+  font-size: 4rem;
+  color: white;
+  opacity: 0.8;
+}
+
+.featured-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--featured);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.achievement-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.achievement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.achievement-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.achievement-date {
+  font-size: 0.875rem;
+  color: var(--primary-light);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.achievement-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.meta-icon {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.meta-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.achievement-description {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.achievement-impact {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
+}
+
+.impact-icon {
+  color: var(--accent);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.impact-text {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
+.achievement-skills {
+  margin-top: auto;
+}
+
+.achievement-skills h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.achievement-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Achievements Grid */
+.achievements-section {
+  padding: 4rem 0;
+  background: rgba(15, 23, 42, 0.3);
+}
+
+.achievements-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.achievement-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.achievement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
+}
+
+.achievement-image-preview {
+  margin: 1rem 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  max-height: 150px;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.verify-btn.small {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+/* All other components use same styles as Certificates.css */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .achievement-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .achievement-date {
+    align-self: flex-start;
+  }
+  
+  .achievement-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .achievement-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievement-image-container {
+    height: 150px;
+  }
+  
+  .achievement-content {
+    padding: 1.25rem;
+  }
+}
