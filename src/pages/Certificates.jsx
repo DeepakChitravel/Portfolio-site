@@ -1,497 +1,363 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPublicCertificates } from "../api/api";
-import "../styles/Certificates.css";
 
-function Certificates() {
-  const [certificates, setCertificates] = useState([]);
+const CertificationsSection = () => {
+  const [certifications, setCertifications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCert, setSelectedCert] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getPublicCertificates()
-      .then((data) => {
-        console.log("CERTIFICATES:", data);
-        setCertificates(data);
-      })
-      .catch((err) => {
-        console.error("Certificates load error:", err);
-        // For demo purposes, create sample data
-        const sampleData = [
-          {
-            _id: "1",
-            title: "Full Stack Web Development",
-            issuer: "Coursera",
-            issueDate: "2023-06-15",
-            expiryDate: "2025-06-15",
-            image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            skills: ["React", "Node.js", "MongoDB", "Express"],
-            credentialUrl: "https://coursera.org/verify/ABC123",
-            category: "development"
-          },
-          {
-            _id: "2",
-            title: "React Developer Professional",
-            issuer: "Meta",
-            issueDate: "2023-03-10",
-            expiryDate: null,
-            image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            skills: ["React", "JavaScript", "Redux", "Next.js"],
-            credentialUrl: "https://meta.com/cert/XYZ456",
-            category: "development"
-          },
-          {
-            _id: "3",
-            title: "AWS Certified Solutions Architect",
-            issuer: "Amazon Web Services",
-            issueDate: "2022-11-20",
-            expiryDate: "2024-11-20",
-            image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            skills: ["AWS", "Cloud", "DevOps", "Architecture"],
-            credentialUrl: "https://aws.amazon.com/certification",
-            category: "cloud"
-          },
-          {
-            _id: "4",
-            title: "JavaScript Algorithms and Data Structures",
-            issuer: "freeCodeCamp",
-            issueDate: "2023-01-05",
-            expiryDate: null,
-            image: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            skills: ["JavaScript", "Algorithms", "Data Structures"],
-            credentialUrl: "https://freecodecamp.org/certification",
-            category: "development"
-          },
-          {
-            _id: "5",
-            title: "UI/UX Design Specialization",
-            issuer: "Google",
-            issueDate: "2023-08-30",
-            expiryDate: "2025-08-30",
-            image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            skills: ["UI Design", "UX Research", "Figma", "Prototyping"],
-            credentialUrl: "https://grow.google/certificates",
-            category: "design"
-          },
-          {
-            _id: "6",
-            title: "Python for Data Science",
-            issuer: "IBM",
-            issueDate: "2022-09-12",
-            expiryDate: "2024-09-12",
-            image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
-            skills: ["Python", "Data Science", "Pandas", "NumPy"],
-            credentialUrl: "https://ibm.com/training",
-            category: "data"
-          }
-        ];
-        setCertificates(sampleData);
-      })
-      .finally(() => setLoading(false));
+    fetchCertifications();
   }, []);
 
-  const handleNavigation = (path) => {
-    const mainContent = document.querySelector('.certificates-content');
-    if (mainContent) {
-      mainContent.style.opacity = '0.7';
-      mainContent.style.transform = 'scale(0.98)';
+  const fetchCertifications = async () => {
+    try {
+      setLoading(true);
+      const data = await getPublicCertificates();
+      
+      const previewCertificates = data.slice(0, 3).map(cert => ({
+        ...cert,
+        icon: getCategoryIcon(cert.category),
+        color: getCategoryColor(cert.category)
+      }));
+      
+      setCertifications(previewCertificates);
+    } catch (error) {
+      console.error("Error fetching certificates:", error);
+      setCertifications([
+        {
+          _id: "1",
+          title: "AWS Certified Developer - Associate",
+          issuer: "Amazon Web Services",
+          description: "Designing, deploying, and operating scalable systems on AWS",
+          category: "cloud",
+          icon: "☁️",
+          color: "warning",
+          issueDate: "2023-08-15",
+          credentialUrl: "#",
+          skills: ["AWS", "Cloud Architecture", "DevOps", "Security"],
+          image: "https://res.cloudinary.com/dghnjzlef/image/upload/v1768709387/eghoxhdsk2cwbujeevzi.webp"
+        },
+        {
+          _id: "2",
+          title: "React Professional Certificate",
+          issuer: "Meta",
+          description: "Advanced React patterns, hooks, and performance optimization",
+          category: "development",
+          icon: "⚛️",
+          color: "info",
+          issueDate: "2023-05-20",
+          credentialUrl: "#",
+          skills: ["React", "JavaScript", "Redux", "Next.js"],
+          image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          _id: "3",
+          title: "Full Stack Web Development",
+          issuer: "Coding Academy",
+          description: "Comprehensive full-stack development with modern frameworks",
+          category: "web",
+          icon: "🚀",
+          color: "primary",
+          issueDate: "2023-02-10",
+          credentialUrl: "#",
+          skills: ["MERN Stack", "REST APIs", "MongoDB", "Express"],
+          image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+        }
+      ]);
+    } finally {
+      setLoading(false);
     }
-    
-    setTimeout(() => {
-      navigate(path);
-    }, 300);
   };
 
-  // Get unique categories
-  const categories = ["all", ...new Set(certificates.map(c => c.category || "uncategorized"))];
+  const getCategoryIcon = (category) => {
+    const iconMap = {
+      'cloud': '☁️', 'aws': '☁️', 'development': '⚛️', 'react': '⚛️',
+      'web': '🚀', 'fullstack': '🚀', 'data': '📊', 'ai': '🤖',
+      'security': '🔒', 'design': '🎨', 'database': '🗄️', 'devops': '🔧'
+    };
+    return iconMap[category] || '📜';
+  };
 
-  // Filter certificates
-  const filteredCertificates = certificates.filter(cert => {
-    const matchesFilter = filter === "all" || cert.category === filter;
-    const matchesSearch = cert.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         cert.issuer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (cert.skills && cert.skills.some(skill => 
-                           skill.toLowerCase().includes(searchTerm.toLowerCase())
-                         ));
-    return matchesFilter && matchesSearch;
-  });
+  const getCategoryColor = (category) => {
+    const colorMap = {
+      'cloud': 'warning', 'development': 'info', 'web': 'primary',
+      'fullstack': 'primary', 'data': 'success', 'ai': 'dark',
+      'security': 'danger', 'design': 'purple', 'database': 'secondary',
+      'devops': 'warning'
+    };
+    return colorMap[category] || 'secondary';
+  };
 
-  // Group certificates by year
-  const certificatesByYear = filteredCertificates.reduce((groups, cert) => {
-    const year = new Date(cert.issueDate).getFullYear();
-    if (!groups[year]) groups[year] = [];
-    groups[year].push(cert);
-    return groups;
-  }, {});
-
-  const sortedYears = Object.keys(certificatesByYear).sort((a, b) => b - a);
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric'
+    });
+  };
 
   if (loading) {
     return (
-      <div className="fullpage-loader">
-        <div className="loader-content">
-          <div className="advanced-loader">
-            <div className="loader-circle">
-              <div className="loader-inner"></div>
-            </div>
-            <div className="loader-text">
-              <div className="loader-dots">
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
-              </div>
-              <h2>Loading Certifications</h2>
-              <p>Fetching your professional credentials...</p>
+      <section className="py-5 bg-white">
+        <div className="container">
+          <div className="text-center mb-5">
+            <div className="placeholder-glow">
+              <div className="placeholder col-3 mx-auto" style={{height: '30px'}}></div>
             </div>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (certificates.length === 0) {
-    return (
-      <div className="empty-state">
-        <div className="empty-icon">📜</div>
-        <h2>No Certificates Yet</h2>
-        <p>Professional certifications will appear here once added.</p>
-        <button className="btn-primary" onClick={() => navigate('/')}>
-          Back to Profile
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="professional-dashboard">
-      {/* Top Navigation Bar */}
-      <nav className="top-navbar">
-        <div className="nav-container">
-          <div className="nav-brand">
-            <div className="brand-logo">C</div>
-            <span className="brand-text">Certifications</span>
-          </div>
-          
-          <div className="nav-links">
-            <button 
-              className="nav-link"
-              onClick={() => handleNavigation('/')}
-            >
-              Home
-            </button>
-            <button 
-              className="nav-link active"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              Certificates
-            </button>
-            <button 
-              className="nav-link"
-              onClick={() => handleNavigation('/achievements')}
-            >
-              Achievements
-            </button>
-            <button 
-              className="nav-link"
-              onClick={() => handleNavigation('/education')}
-            >
-              Education
-            </button>
-          </div>
-          
-          <button className="nav-contact" onClick={() => handleNavigation('/')}>
-            <span className="contact-icon">🏠</span>
-            Back to Profile
-          </button>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="certificates-content">
-        {/* Hero Section */}
-        <section className="hero-section">
-          <div className="hero-container">
-            <div className="hero-content">
-              <div className="hero-badge">
-                <span className="badge-dot"></span>
-                Professional Credentials
-              </div>
-              
-              <h1 className="hero-title">
-                My <span className="highlight">Certifications</span>
-              </h1>
-              
-              <p className="hero-subtitle">
-                Verified professional certifications and badges demonstrating expertise across various technologies
-              </p>
-              
-              <div className="hero-stats">
-                <div className="stat">
-                  <span className="stat-number">{certificates.length}</span>
-                  <span className="stat-label">Total Certificates</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-number">
-                    {certificates.filter(c => !c.expiryDate).length}
-                  </span>
-                  <span className="stat-label">No Expiry</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-number">
-                    {new Set(certificates.map(c => c.issuer)).size}
-                  </span>
-                  <span className="stat-label">Different Issuers</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Filters and Search */}
-        <section className="filters-section">
-          <div className="section-container">
-            <div className="search-box">
-              <input
-                type="text"
-                placeholder="Search certificates, skills, or issuers..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-              <span className="search-icon">🔍</span>
-            </div>
-            
-            <div className="filter-tabs">
-              {categories.map(category => (
-                <button
-                  key={category}
-                  className={`filter-tab ${filter === category ? 'active' : ''}`}
-                  onClick={() => setFilter(category)}
-                >
-                  {category.charAt(0).toUpperCase() + category.slice(1)}
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Summary Cards */}
-        <section className="summary-section">
-          <div className="section-container">
-            <div className="summary-cards">
-              <div className="summary-card">
-                <div className="summary-icon">🎓</div>
-                <div className="summary-content">
-                  <h3>Active Certificates</h3>
-                  <p>{certificates.filter(c => !c.expiryDate || new Date(c.expiryDate) > new Date()).length} valid</p>
-                </div>
-              </div>
-              <div className="summary-card">
-                <div className="summary-icon">🏆</div>
-                <div className="summary-content">
-                  <h3>Latest Achievement</h3>
-                  <p>
-                    {certificates.length > 0 
-                      ? certificates.sort((a, b) => new Date(b.issueDate) - new Date(a.issueDate))[0].title
-                      : 'None'
-                    }
-                  </p>
-                </div>
-              </div>
-              <div className="summary-card">
-                <div className="summary-icon">📈</div>
-                <div className="summary-content">
-                  <h3>Skill Coverage</h3>
-                  <p>
-                    {new Set(certificates.flatMap(c => c.skills || [])).size} skills
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Certificates Grid */}
-        <section className="certificates-section">
-          <div className="section-container">
-            {sortedYears.map(year => (
-              <div key={year} className="year-section">
-                <div className="section-header">
-                  <h2 className="section-title">
-                    <span className="title-number">{year}</span>
-                    Certificates
-                  </h2>
-                  <div className="section-line"></div>
-                  <span className="year-count">
-                    {certificatesByYear[year].length} certificate{certificatesByYear[year].length !== 1 ? 's' : ''}
-                  </span>
-                </div>
-                
-                <div className="certificates-grid">
-                  {certificatesByYear[year].map((cert) => (
-                    <div key={cert._id} className="certificate-card">
-                      <div className="certificate-image-container">
-                        {cert.image ? (
-                          <img 
-                            src={cert.image} 
-                            alt={cert.title}
-                            className="certificate-image"
-                            loading="lazy"
-                          />
-                        ) : (
-                          <div className="certificate-placeholder">
-                            <span className="placeholder-icon">📜</span>
-                          </div>
-                        )}
-                        {cert.category && (
-                          <span className="certificate-category">
-                            {cert.category}
-                          </span>
-                        )}
-                        {cert.expiryDate && new Date(cert.expiryDate) < new Date() ? (
-                          <span className="expired-badge">Expired</span>
-                        ) : cert.expiryDate ? (
-                          <span className="expiry-badge">
-                            Expires {new Date(cert.expiryDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                          </span>
-                        ) : (
-                          <span className="no-expiry-badge">No Expiry</span>
-                        )}
-                      </div>
-                      
-                      <div className="certificate-content">
-                        <h3 className="certificate-title">{cert.title}</h3>
-                        
-                        <div className="certificate-meta">
-                          <div className="meta-item">
-                            <span className="meta-icon">🏛️</span>
-                            <span className="meta-text">{cert.issuer}</span>
-                          </div>
-                          <div className="meta-item">
-                            <span className="meta-icon">📅</span>
-                            <span className="meta-text">
-                              Issued {new Date(cert.issueDate).toLocaleDateString('en-US', { 
-                                month: 'long', 
-                                year: 'numeric' 
-                              })}
-                            </span>
-                          </div>
-                        </div>
-                        
-                        {cert.skills && cert.skills.length > 0 && (
-                          <div className="certificate-skills">
-                            <h4>Skills Demonstrated</h4>
-                            <div className="skills-list">
-                              {cert.skills.map((skill, index) => (
-                                <span key={index} className="skill-tag">
-                                  {skill}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                        
-                        <div className="certificate-actions">
-                          {cert.credentialUrl && (
-                            <a
-                              href={cert.credentialUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="verify-btn"
-                            >
-                              <span className="btn-icon">🔗</span>
-                              Verify Credential
-                            </a>
-                          )}
-                          <button 
-                            className="details-btn"
-                            onClick={() => {
-                              // Show certificate details modal or navigate to detail page
-                              alert(`Certificate Details:\n\n${cert.title}\n${cert.issuer}\nIssued: ${cert.issueDate}\n\n${cert.skills ? `Skills: ${cert.skills.join(', ')}` : ''}`);
-                            }}
-                          >
-                            View Details
-                          </button>
-                        </div>
-                      </div>
+          <div className="row g-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="col-md-4">
+                <div className="card h-100 border-0 shadow-sm">
+                  <div className="card-body p-4">
+                    <div className="placeholder-glow">
+                      <div className="placeholder rounded-3 mb-3" style={{height: '150px'}}></div>
+                      <div className="placeholder col-8 mb-2"></div>
+                      <div className="placeholder col-6 mb-3"></div>
+                      <div className="placeholder col-12"></div>
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
+    );
+  }
 
-        {/* Footer CTA */}
-        <section className="cta-section">
-          <div className="section-container">
-            <div className="cta-content">
-              <h3 className="cta-title">Need Verification?</h3>
-              <p className="cta-text">
-                Most certificates include direct verification links. Contact me for any additional verification requirements or documentation.
-              </p>
-              <div className="cta-actions">
-                <button 
-                  className="btn-primary large"
-                  onClick={() => window.location.href = 'mailto:' + (certificates[0]?.email || 'contact@example.com')}
-                >
-                  <span className="btn-icon">✉️</span>
-                  Request Verification
-                </button>
-                <button 
-                  className="btn-secondary"
-                  onClick={() => handleNavigation('/')}
-                >
-                  <span className="btn-icon">🏠</span>
-                  Back to Profile
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
+  return (
+    <section className="py-5 bg-white" id="certifications">
+      <div className="container">
+        {/* Section Header */}
+        <div className="text-center mb-5">
+          <span className="badge bg-primary bg-opacity-10 text-primary px-4 py-2 rounded-pill mb-3">
+            <i className="bi bi-award me-2"></i>Certifications
+          </span>
+          <h2 className="fw-bold mb-3">Professional Certifications</h2>
+          <p className="text-muted mb-4">
+            Industry-recognized credentials validating technical expertise
+          </p>
+        </div>
 
-      {/* Footer */}
-      <footer className="dashboard-footer">
-        <div className="footer-container">
-          <div className="footer-content">
-            <div className="footer-brand">
-              <div className="footer-logo">C</div>
-              <div className="footer-info">
-                <h3>Professional Certifications</h3>
-                <p>{certificates.length} credentials verified</p>
-              </div>
+        {/* Certifications Grid */}
+        {certifications.length > 0 ? (
+          <>
+            <div className="row g-4 mb-5">
+              {certifications.map((cert) => (
+                <div key={cert._id} className="col-lg-4 col-md-6">
+                  <div className="card h-100 border-0 shadow-sm">
+                    {/* Certificate Image - Full width */}
+                    <div className="position-relative" style={{height: '200px', overflow: 'hidden'}}>
+                      {cert.image ? (
+                        <img 
+                          src={cert.image}
+                          alt={cert.title}
+                          className="img-fluid w-100 h-100"
+                          style={{objectFit: 'contain', backgroundColor: '#f8f9fa'}}
+                        />
+                      ) : (
+                        <div className={`bg-${cert.color} bg-opacity-10 h-100 d-flex align-items-center justify-content-center`}>
+                          <span className="display-4">{cert.icon}</span>
+                        </div>
+                      )}
+                      <span className={`position-absolute top-0 end-0 m-3 badge bg-${cert.color} px-3 py-2`}>
+                        {cert.category?.toUpperCase() || 'CERT'}
+                      </span>
+                    </div>
+
+                    {/* Card Body */}
+                    <div className="card-body">
+                      <h5 className="fw-bold mb-2">{cert.title}</h5>
+                      <div className="d-flex align-items-center text-muted small mb-3">
+                        <i className={`bi bi-building text-${cert.color} me-2`}></i>
+                        {cert.issuer}
+                      </div>
+                      
+                      <p className="text-muted small mb-3">{cert.description}</p>
+
+                      {/* Actions */}
+                      <div className="d-flex justify-content-between">
+                        <button 
+                          className={`btn btn-${cert.color} btn-sm`}
+                          data-bs-toggle="modal"
+                          data-bs-target="#certModal"
+                          onClick={() => setSelectedCert(cert)}
+                        >
+                          <i className="bi bi-eye me-1"></i> View Certificate
+                        </button>
+                        {cert.credentialUrl && (
+                          <a
+                            href={cert.credentialUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-outline-secondary btn-sm"
+                          >
+                            <i className="bi bi-link-45deg me-1"></i> Verify
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-            
-            <div className="footer-links">
-              <button className="footer-link" onClick={() => handleNavigation('/')}>
-                Home
-              </button>
-              <button className="footer-link" onClick={() => handleNavigation('/achievements')}>
-                Achievements
-              </button>
-              <button className="footer-link" onClick={() => handleNavigation('/education')}>
-                Education
-              </button>
-            </div>
-            
-            <div className="footer-actions">
-              <button className="footer-btn" onClick={() => window.print()}>
-                Print Certificates
+
+            {/* View All Button */}
+            <div className="text-center">
+              <button
+                className="btn btn-primary px-4 py-2"
+                onClick={() => navigate('/certificates')}
+              >
+                <i className="bi bi-award me-2"></i>
+                View All Certifications
               </button>
             </div>
+          </>
+        ) : (
+          <div className="text-center py-5">
+            <div className="display-4 text-muted mb-3">
+              <i className="bi bi-award"></i>
+            </div>
+            <h5 className="fw-bold mb-3">No Certifications</h5>
+            <p className="text-muted mb-4">
+              Certificates will appear here when added.
+            </p>
+            <button className="btn btn-primary" onClick={() => navigate('/certificates')}>
+              <i className="bi bi-plus-circle me-2"></i>
+              Add Certificate
+            </button>
           </div>
-          
-          <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} Professional Portfolio. All rights reserved.</p>
-            <p className="footer-note">{certificates.length} Professional Certifications</p>
+        )}
+      </div>
+
+      {/* Bootstrap Modal */}
+      <div className="modal fade" id="certModal" tabIndex="-1" aria-labelledby="certModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-lg modal-dialog-centered">
+          <div className="modal-content">
+            {selectedCert && (
+              <>
+                {/* Modal Header */}
+                <div className="modal-header">
+                  <div className="d-flex align-items-center">
+                    <div className={`bg-${selectedCert.color} text-white rounded-2 p-3 me-3`}>
+                      <span className="fs-3">{selectedCert.icon}</span>
+                    </div>
+                    <div>
+                      <h5 className="modal-title fw-bold">{selectedCert.title}</h5>
+                      <p className="text-muted mb-0 small">{selectedCert.issuer}</p>
+                    </div>
+                  </div>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                {/* Modal Body */}
+                <div className="modal-body">
+                  {/* Certificate Image - Medium Size */}
+                  <div className="text-center mb-4">
+                    {selectedCert.image ? (
+                      <div className="bg-light rounded p-3">
+                        <img 
+                          src={selectedCert.image}
+                          alt={selectedCert.title}
+                          className="img-fluid"
+                          style={{maxHeight: '350px', objectFit: 'contain'}}
+                        />
+                      </div>
+                    ) : (
+                      <div className={`bg-${selectedCert.color} bg-opacity-10 rounded-3 p-4`}>
+                        <div className={`bg-${selectedCert.color} text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3`}
+                             style={{width: '80px', height: '80px'}}>
+                          <span className="fs-2">{selectedCert.icon}</span>
+                        </div>
+                        <p className="text-muted small">Certificate Preview</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Details */}
+                  <div className="row g-3 mb-4">
+                    <div className="col-md-6">
+                      <div className="d-flex align-items-center p-3 bg-light rounded">
+                        <i className="bi bi-calendar text-primary me-3"></i>
+                        <div>
+                          <div className="small text-muted">Issue Date</div>
+                          <div className="fw-medium">{formatDate(selectedCert.issueDate)}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="d-flex align-items-center p-3 bg-light rounded">
+                        <i className={`bi bi-tag text-${selectedCert.color} me-3`}></i>
+                        <div>
+                          <div className="small text-muted">Category</div>
+                          <div className="fw-medium">{selectedCert.category || 'General'}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div className="mb-4">
+                    <h6 className="fw-bold mb-3">Description</h6>
+                    <p className="text-dark">{selectedCert.description}</p>
+                  </div>
+
+                  {/* Skills */}
+                  {selectedCert.skills && selectedCert.skills.length > 0 && (
+                    <div className="mb-4">
+                      <h6 className="fw-bold mb-3">Skills</h6>
+                      <div className="d-flex flex-wrap gap-2">
+                        {selectedCert.skills.map((skill, index) => (
+                          <span key={index} className="badge bg-light text-dark border px-3 py-1">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Verification */}
+                  {selectedCert.credentialUrl && (
+                    <div className="bg-light rounded p-3">
+                      <h6 className="fw-bold mb-3">Verification</h6>
+                      <a
+                        href={selectedCert.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`btn btn-${selectedCert.color} w-100`}
+                      >
+                        <i className="bi bi-link-45deg me-2"></i>
+                        Verify Certificate
+                      </a>
+                    </div>
+                  )}
+                </div>
+
+                {/* Modal Footer */}
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-primary"
+                    onClick={() => navigate('/certificates')}
+                    data-bs-dismiss="modal"
+                  >
+                    View All Certificates
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </section>
   );
-}
+};
 
-export default Certificates;
+export default CertificationsSection;
