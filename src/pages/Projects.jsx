@@ -1,5 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import { getPublicProjects } from "../api/api.js";
+import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
+import { 
+  FaCode, 
+  FaExternalLinkAlt, 
+  FaGithub, 
+  FaLaptopCode,
+  FaTools,
+  FaEye,
+  FaInfoCircle,
+  FaArrowRight,
+  FaMousePointer,
+  FaStar,
+  FaArrowDown
+} from 'react-icons/fa';
 
 const ProjectsSection = () => {
   const [projects, setProjects] = useState([]);
@@ -51,332 +65,343 @@ const ProjectsSection = () => {
       .finally(() => setLoading(false));
   }, []);
 
-const handleMouseEnter = (projectId) => {
-  setHoveredProject(projectId);
-  const imgElement = imageRefs.current[projectId];
-  if (imgElement) {
-    // ⚡ CHANGE THIS NUMBER - Smaller = Faster (was 8s)
-    imgElement.style.transition = 'transform 3s ease-in-out'; // Changed from 8s to 3s
-    imgElement.style.transform = 'translateY(-70%)';
-  }
-};
+  const handleMouseEnter = (projectId) => {
+    setHoveredProject(projectId);
+    const imgElement = imageRefs.current[projectId];
+    if (imgElement) {
+      imgElement.style.transition = 'transform 8s ease-in-out';
+      imgElement.style.transform = 'translateY(-30%)';
+    }
+  };
 
-const handleMouseLeave = (projectId) => {
-  setHoveredProject(null);
-  const imgElement = imageRefs.current[projectId];
-  if (imgElement) {
-    // ⚡ CHANGE THIS NUMBER - Smaller = Faster (was 3s)
-    imgElement.style.transition = 'transform 1.5s ease-in-out'; // Changed from 3s to 1.5s
-    imgElement.style.transform = 'translateY(0)';
-  }
-};
-
-// Also update the CSS at the bottom:
-<style jsx>{`
-  .project-image {
-    transition: transform 3s ease-in-out !important; // Changed from 8s to 3s
-    will-change: transform;
-  }
-`}</style>
+  const handleMouseLeave = (projectId) => {
+    setHoveredProject(null);
+    const imgElement = imageRefs.current[projectId];
+    if (imgElement) {
+      imgElement.style.transition = 'transform 2s ease-in-out';
+      imgElement.style.transform = 'translateY(0)';
+    }
+  };
 
   if (loading) {
     return (
-      <section className="py-6 py-lg-8 bg-light">
-        <div className="container">
-          <div className="text-center mb-5">
-            <div className="placeholder-glow">
-              <div className="placeholder col-3 mx-auto" style={{height: '40px'}}></div>
-            </div>
-          </div>
-          <div className="row g-4">
+      <section id="projects" className="py-5 bg-white">
+        <Container>
+          <Row className="mb-5">
+            <Col className="text-center">
+              <h2 className="display-5 fw-bold mb-3">Featured Projects</h2>
+              <p className="lead text-muted mb-4">Showcasing my work and technical implementations</p>
+              <div className="bg-primary mx-auto mb-4" 
+                   style={{ width: '60px', height: '3px' }}></div>
+            </Col>
+          </Row>
+          
+          <Row className="justify-content-center g-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="col-md-4">
-                <div className="card h-100 border-0 shadow-sm">
-                  <div className="card-body p-4">
+              <Col lg={4} md={6} key={i}>
+                <Card className="border-0 shadow-sm">
+                  <Card.Body className="p-4">
                     <div className="placeholder-glow">
-                      <div className="placeholder rounded-3 mb-3" style={{height: '200px'}}></div>
+                      <div className="placeholder col-12 mb-3" style={{ height: '220px' }}></div>
                       <div className="placeholder col-8 mb-2"></div>
                       <div className="placeholder col-6 mb-3"></div>
                       <div className="placeholder col-12"></div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  </Card.Body>
+                </Card>
+              </Col>
             ))}
-          </div>
-        </div>
+          </Row>
+        </Container>
       </section>
     );
   }
 
   if (projects.length === 0) {
     return (
-      <section className="py-6 py-lg-8 bg-light">
-        <div className="container">
-          <div className="text-center">
-            <span className="badge bg-primary bg-opacity-10 text-primary px-4 py-2 rounded-pill mb-3">
-              <i className="bi bi-code-square me-2"></i>Projects
-            </span>
-            <h2 className="display-5 fw-bold mb-3">My Projects</h2>
-            <p className="lead text-muted mb-4">Showcasing my work and technical implementations</p>
-          </div>
-          <div className="text-center py-5">
-            <div className="display-1 text-muted mb-3">
-              <i className="bi bi-code-slash"></i>
-            </div>
-            <h4 className="fw-bold mb-3">No Projects Yet</h4>
-            <p className="text-muted">Projects will appear here once they are added.</p>
-          </div>
-        </div>
+      <section id="projects" className="py-5 bg-white">
+        <Container>
+          <Row className="mb-5">
+            <Col className="text-center">
+              <Badge 
+                bg="primary" 
+                className="px-4 py-2 mb-3 rounded-pill fw-medium d-inline-flex align-items-center shadow-sm"
+              >
+                <FaCode className="me-2" />
+                Portfolio
+              </Badge>
+              <h2 className="display-5 fw-bold mb-3">My Projects</h2>
+              <p className="lead text-muted mb-4">Showcasing my work and technical implementations</p>
+              <div className="bg-primary mx-auto mb-4" 
+                   style={{ width: '60px', height: '3px' }}></div>
+            </Col>
+          </Row>
+          
+          <Row className="justify-content-center">
+            <Col lg={6}>
+              <Card className="border-0 shadow-sm">
+                <Card.Body className="text-center p-5">
+                  <div className="text-muted mb-4">
+                    <FaLaptopCode size={60} />
+                  </div>
+                  <h4 className="fw-bold mb-3">No Projects Yet</h4>
+                  <p className="text-muted mb-0">
+                    Projects will appear here once they are added.
+                  </p>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </section>
     );
   }
 
   return (
-    <section className="py-6 py-lg-8 bg-light" id="projects">
-      <div className="container">
+    <section id="projects" className="py-5 bg-light">
+      <Container>
         {/* Section Header */}
-        <div className="text-center mb-5 mb-lg-6">
-          <span className="badge bg-primary bg-opacity-10 text-primary px-4 py-2 rounded-pill mb-4">
-            <i className="bi bi-code-square me-2"></i>Portfolio Showcase
-          </span>
-          <h2 className="display-5 fw-bold mb-3">Featured Projects</h2>
-          <p className="lead text-muted mb-4 mx-auto" style={{maxWidth: '700px'}}>
-            Interactive showcase of web applications and technical implementations
-          </p>
-          <div className="text-muted small">
-            <i className="bi bi-info-circle me-1"></i>
-            Hover over images to explore full project screenshots
-          </div>
-        </div>
+        <Row className="mb-5">
+          <Col lg={8} className="mx-auto text-center">
+            <Badge 
+              bg="primary" 
+              className="px-4 py-2 mb-3 rounded-pill fw-medium d-inline-flex align-items-center shadow-sm"
+            >
+              <FaCode className="me-2" />
+              Portfolio Showcase
+            </Badge>
+            <h2 className="display-5 fw-bold mb-3">Featured Projects</h2>
+            <p className="lead text-muted mb-4">
+              Interactive showcase of web applications and technical implementations
+            </p>
+            <div className="bg-primary mx-auto mb-4" 
+                 style={{ width: '60px', height: '3px' }}></div>
+          </Col>
+        </Row>
 
         {/* Projects Grid */}
-        <div className="row g-4 g-lg-5">
+        <Row className="g-4 justify-content-center">
           {projects.slice(0, 3).map((project) => (
-            <div key={project._id} className="col-lg-4 col-md-6">
-              <div className="card h-100 border-0 shadow-sm overflow-hidden project-card">
+            <Col lg={4} md={6} key={project._id}>
+              <Card 
+                className="border-0 shadow-sm h-100"
+                onMouseEnter={() => handleMouseEnter(project._id)}
+                onMouseLeave={() => handleMouseLeave(project._id)}
+                style={{ 
+                  transition: 'all 0.3s ease',
+                  transform: hoveredProject === project._id ? 'translateY(-8px)' : 'translateY(0)'
+                }}
+              >
                 {/* Project Image Container */}
                 <div 
-                  className="position-relative project-image-container rounded-top overflow-hidden"
-                  style={{height: '220px'}}
-                  onMouseEnter={() => handleMouseEnter(project._id)}
-                  onMouseLeave={() => handleMouseLeave(project._id)}
+                  className="position-relative overflow-hidden" 
+                  style={{ 
+                    height: '240px',
+                    backgroundColor: '#f8f9fa'
+                  }}
                 >
-                  {project.image ? (
-                    <>
-                      <img 
-                        ref={el => imageRefs.current[project._id] = el}
-                        src={project.image}
-                        alt={project.title}
-                        className="project-image img-fluid w-100"
-                        style={{
-                          height: '300px',
-                          objectFit: 'cover',
-                          objectPosition: 'top center'
-                        }}
-                      />
-                      {/* Gradient Overlay */}
-                      <div className="position-absolute top-0 start-0 w-100 h-100 bg-gradient-dark"></div>
-                      
-                      {/* Hover Overlay */}
-                      <div className={`position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center transition-opacity ${
-                        hoveredProject === project._id ? 'opacity-100' : 'opacity-0'
-                      }`}>
-                        <div className="text-white text-center">
-                          <i className="bi bi-arrow-down display-4 mb-3"></i>
-                          <div className="fw-medium mb-1">Scrolling Preview</div>
-                          <div className="small opacity-75">Top to bottom view</div>
-                        </div>
+                  {/* Project Image */}
+                  <img 
+                    ref={el => imageRefs.current[project._id] = el}
+                    src={project.image}
+                    alt={project.title}
+                    className="w-100 h-100"
+                    style={{ 
+                      objectFit: 'cover',
+                      objectPosition: 'top',
+                      transition: 'transform 8s ease-in-out'
+                    }}
+                  />
+                  
+                  {/* Overlay Gradient */}
+                  <div className="position-absolute top-0 start-0 w-100 h-100"
+                       style={{
+                         background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)'
+                       }}>
+                  </div>
+                  
+                  {/* Hover Indicator */}
+                  <div className={`position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center ${
+                    hoveredProject === project._id ? 'opacity-100' : 'opacity-0'
+                  }`}
+                       style={{ 
+                         transition: 'opacity 0.3s ease',
+                         background: 'rgba(0,0,0,0.5)',
+                         backdropFilter: 'blur(2px)'
+                       }}>
+                    <div className="text-center text-white">
+                      <div className="bg-primary rounded-circle p-3 d-inline-flex align-items-center justify-content-center mb-3">
+                        <FaArrowDown size={24} />
                       </div>
-                    </>
-                  ) : (
-                    <div className="bg-primary bg-opacity-10 h-100 d-flex align-items-center justify-content-center rounded-top">
-                      <i className="bi bi-code-slash display-4 text-primary"></i>
+                      <div className="fw-medium mb-1">Scroll Preview</div>
+                      <div className="small opacity-75">Top to bottom view</div>
                     </div>
-                  )}
+                  </div>
                   
                   {/* Project Badge */}
-                  <div className="position-absolute top-0 end-0 m-4">
-                    <span className="badge bg-white text-dark px-3 py-2 shadow-sm">
-                      <i className="bi bi-laptop me-2"></i> Web App
-                    </span>
+                  <div className="position-absolute top-0 end-0 m-3">
+                    <Badge bg="white" text="dark" className="px-3 py-2 shadow-sm">
+                      <FaStar className="me-2 text-warning" />
+                      Featured
+                    </Badge>
                   </div>
+                  
+                  {/* Technology Count */}
+                  {project.technologies && (
+                    <div className="position-absolute bottom-0 start-0 m-3">
+                      <Badge bg="primary" className="px-3 py-2 shadow-sm">
+                        <FaTools className="me-2" />
+                        {project.technologies.length} Tech
+                      </Badge>
+                    </div>
+                  )}
                 </div>
 
-                {/* Card Body */}
-                <div className="card-body p-4">
-                  <div className="d-flex justify-content-between align-items-start mb-4">
-                    <div>
-                      <h4 className="fw-bold mb-2">{project.title}</h4>
-                      {project.shortIntro && (
-                        <p className="text-muted small mb-0">
-                          <i className="bi bi-info-circle me-2"></i>
-                          {project.shortIntro}
-                        </p>
-                      )}
+                <Card.Body className="p-4 d-flex flex-column">
+                  {/* Project Header */}
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-start mb-2">
+                      <h4 className="fw-bold mb-0">{project.title}</h4>
+                      <Badge bg="primary" className="px-2 py-1">
+                        Web
+                      </Badge>
                     </div>
-                    <span className="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
-                      <i className="bi bi-stars me-1"></i>
-                      Featured
-                    </span>
+                    
+                    {project.shortIntro && (
+                      <div className="d-flex align-items-center text-muted small mb-3">
+                        <FaInfoCircle className="me-2" size={14} />
+                        {project.shortIntro}
+                      </div>
+                    )}
                   </div>
 
-                  <p className="text-dark mb-4">{project.description}</p>
+                  {/* Project Description */}
+                  <p className="text-dark mb-4 flex-grow-1">
+                    {project.description}
+                  </p>
 
                   {/* Technologies */}
                   {project.technologies && project.technologies.length > 0 && (
                     <div className="mb-4">
-                      <h6 className="fw-bold mb-3 d-flex align-items-center">
-                        <i className="bi bi-tools text-primary me-2"></i>
-                        Tech Stack
-                      </h6>
+                      <div className="d-flex align-items-center mb-2">
+                        <FaTools className="me-2 text-primary" size={16} />
+                        <h6 className="fw-bold mb-0">Tech Stack</h6>
+                      </div>
                       <div className="d-flex flex-wrap gap-2">
-                        {project.technologies.slice(0, 4).map((tech, index) => (
-                          <span key={index} className="badge bg-light text-dark border px-3 py-1">
+                        {project.technologies.slice(0, 5).map((tech, index) => (
+                          <Badge 
+                            key={index}
+                            bg="light" 
+                            text="dark" 
+                            className="px-3 py-1 border"
+                          >
                             {tech}
-                          </span>
+                          </Badge>
                         ))}
-                        {project.technologies.length > 4 && (
-                          <span className="badge bg-light text-dark border px-3 py-1">
-                            +{project.technologies.length - 4}
-                          </span>
+                        {project.technologies.length > 5 && (
+                          <Badge bg="light" text="dark" className="px-3 py-1 border">
+                            +{project.technologies.length - 5}
+                          </Badge>
                         )}
                       </div>
                     </div>
                   )}
 
-                  {/* Links */}
-                  <div className="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+                  {/* Action Buttons */}
+                  <div className="d-flex justify-content-between align-items-center mt-auto pt-4 border-top">
                     <div className="d-flex gap-2">
                       {project.liveUrl && (
-                        <a
+                        <Button
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn btn-primary btn-sm px-4"
+                          variant="primary"
+                          size="sm"
+                          className="px-3 d-flex align-items-center"
                         >
-                          <i className="bi bi-play-circle me-2"></i>
-                          Live Demo
-                        </a>
+                          <FaExternalLinkAlt className="me-2" />
+                          Live
+                        </Button>
                       )}
                       {project.githubUrl && (
-                        <a
+                        <Button
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn btn-outline-dark btn-sm px-4"
+                          variant="outline-dark"
+                          size="sm"
+                          className="px-3 d-flex align-items-center"
                         >
-                          <i className="bi bi-github me-2"></i>
+                          <FaGithub className="me-2" />
                           Code
-                        </a>
+                        </Button>
                       )}
                     </div>
-                    <button 
-                      className="btn btn-link text-decoration-none text-dark btn-sm"
-                      data-bs-toggle="modal"
-                      data-bs-target="#projectModal"
+                    <Button 
+                      variant="link" 
+                      className="text-decoration-none text-dark p-0 d-flex align-items-center"
+                      onClick={() => {/* Add modal functionality */}}
                     >
-                      <i className="bi bi-arrow-right me-1"></i>
                       Details
-                    </button>
+                      <FaArrowRight className="ms-2" />
+                    </Button>
                   </div>
-                </div>
-              </div>
-            </div>
+                </Card.Body>
+              </Card>
+            </Col>
           ))}
-        </div>
+        </Row>
 
-        {/* Stats Section */}
-        <div className="row mt-6">
-          <div className="col-12">
-            <div className="bg-white rounded-4 p-4 p-lg-5 shadow-sm">
-              <div className="row text-center">
-                <div className="col-md-3 mb-4 mb-md-0">
-                  <div className="display-6 fw-bold text-primary mb-2">{projects.length}</div>
-                  <div className="text-muted">Total Projects</div>
-                </div>
-                <div className="col-md-3 mb-4 mb-md-0">
-                  <div className="display-6 fw-bold text-success mb-2">
-                    {projects.filter(p => p.liveUrl).length}
-                  </div>
-                  <div className="text-muted">Live Demos</div>
-                </div>
-                <div className="col-md-3 mb-4 mb-md-0">
-                  <div className="display-6 fw-bold text-warning mb-2">
-                    {new Set(projects.flatMap(p => p.technologies || [])).size}
-                  </div>
-                  <div className="text-muted">Technologies</div>
-                </div>
-                <div className="col-md-3">
-                  <div className="display-6 fw-bold text-info mb-2">
-                    {projects.filter(p => p.githubUrl).length}
-                  </div>
-                  <div className="text-muted">Open Source</div>
-                </div>
-              </div>
+
+
+        {/* Quick Stats */}
+        <Row className="mt-4 g-3">
+          <Col md={3} sm={6}>
+            <div className="text-center p-3 bg-white rounded-3 border">
+              <div className="fs-2 fw-bold text-primary mb-1">{projects.length}</div>
+              <div className="text-muted small">Projects</div>
             </div>
-          </div>
-        </div>
+          </Col>
+          <Col md={3} sm={6}>
+            <div className="text-center p-3 bg-white rounded-3 border">
+              <div className="fs-2 fw-bold text-success mb-1">
+                {projects.filter(p => p.liveUrl).length}
+              </div>
+              <div className="text-muted small">Live Demos</div>
+            </div>
+          </Col>
+          <Col md={3} sm={6}>
+            <div className="text-center p-3 bg-white rounded-3 border">
+              <div className="fs-2 fw-bold text-warning mb-1">
+                {new Set(projects.flatMap(p => p.technologies || [])).size}
+              </div>
+              <div className="text-muted small">Technologies</div>
+            </div>
+          </Col>
+          <Col md={3} sm={6}>
+            <div className="text-center p-3 bg-white rounded-3 border">
+              <div className="fs-2 fw-bold text-info mb-1">100%</div>
+              <div className="text-muted small">Success Rate</div>
+            </div>
+          </Col>
+        </Row>
 
-        {/* View All Button */}
+        {/* View All Button & Instructions */}
         {projects.length > 3 && (
-          <div className="text-center mt-6">
-            <button className="btn btn-primary px-5 py-3">
-              <i className="bi bi-grid-3x3-gap me-2"></i>
-              View All Projects
-            </button>
-            <p className="text-muted small mt-3">
-              <i className="bi bi-mouse me-1"></i>
-              Hover over project cards to explore interactive previews
-            </p>
-          </div>
+          <Row className="mt-5">
+            <Col className="text-center">
+              <Button variant="primary" size="lg" className="px-5 py-3">
+                <FaLaptopCode className="me-2" />
+                View All Projects
+              </Button>
+              <div className="text-muted small mt-3 d-flex align-items-center justify-content-center">
+                <FaMousePointer className="me-2" />
+                Hover over project images to scroll through screenshots
+              </div>
+            </Col>
+          </Row>
         )}
-      </div>
-
-      {/* Inline CSS for smooth scrolling effect */}
-      <style jsx>{`
-        .project-image-container {
-          cursor: pointer;
-          position: relative;
-          background: #f8f9fa;
-        }
-        
-        .project-image {
-          transition: transform 8s ease-in-out;
-          will-change: transform;
-        }
-        
-        .project-image-container:hover .project-image {
-          transform: translateY(-70%);
-        }
-        
-        .project-card {
-          transition: all 0.4s ease;
-        }
-        
-        .project-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
-        }
-        
-        .bg-gradient-dark {
-          background: linear-gradient(to bottom, 
-            rgba(0, 0, 0, 0.2) 0%, 
-            rgba(0, 0, 0, 0) 30%,
-            rgba(0, 0, 0, 0) 70%,
-            rgba(0, 0, 0, 0.3) 100%);
-          pointer-events: none;
-        }
-        
-        .transition-opacity {
-          transition: opacity 0.3s ease;
-        }
-        
-        .rounded-top {
-          border-top-left-radius: 0.5rem !important;
-          border-top-right-radius: 0.5rem !important;
-        }
-      `}</style>
+      </Container>
     </section>
   );
 };

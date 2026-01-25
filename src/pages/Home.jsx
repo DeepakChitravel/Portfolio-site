@@ -9,7 +9,8 @@ import TechnicalSkills from './TechnicalSkills';
 import Education from "./Education";
 import ExperienceSummary from "./ExperienceSummary";
 import Projects from './Projects'; // Add this import
-
+import Footer from "./Footer";
+import Contact from "./Contact";
 function Home() {
   const [profile, setProfile] = useState(null);
   const [education, setEducation] = useState([]);
@@ -126,74 +127,8 @@ function Home() {
       {/* Certifications Section */}
       <CertificationsSection />
 
-      {/* Contact Section */}
-      <section id="contact" className="contact-section">
-        <div className="section-container">
-          <div className="contact-content">
-            <h2>Ready to Connect?</h2>
-            <p className="contact-subtitle">
-              I'm currently available for full-time opportunities and freelance projects.
-            </p>
-            <div className="contact-info">
-              <div className="contact-item">
-                <div className="contact-label">Email</div>
-                <a href={`mailto:${profile.email}`} className="contact-value">
-                  {profile.email}
-                </a>
-              </div>
-              <div className="contact-item">
-                <div className="contact-label">Location</div>
-                <div className="contact-value">{profile.location}</div>
-              </div>
-              <div className="contact-item">
-                <div className="contact-label">Status</div>
-                <div className="contact-value">
-                  <span className="status-badge">
-                    <span className="status-dot"></span>
-                    Open to Opportunities
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="contact-actions">
-              <a href={`mailto:${profile.email}`} className="primary-btn large">
-                Send Email
-              </a>
-              <a
-                href={profile.resume ? `http://localhost:5000${profile.resume}` : "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="secondary-btn large"
-              >
-                Download Resume
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="portfolio-footer">
-        <div className="footer-content">
-          <div className="footer-left">
-            <div className="footer-logo">{profile.name.charAt(0)}</div>
-            <div>
-              <h3>{profile.name}</h3>
-              <p>{profile.role}</p>
-            </div>
-          </div>
-          <div className="footer-right">
-            <div className="social-links">
-              <a href="#">LinkedIn</a>
-              <a href="#">GitHub</a>
-              <a href="#">Twitter</a>
-            </div>
-            <p className="copyright">
-              © {new Date().getFullYear()} {profile.name}
-            </p>
-          </div>
-        </div>
-      </footer>
+<Contact/>
+<Footer/>
     </div>
   );
 }
