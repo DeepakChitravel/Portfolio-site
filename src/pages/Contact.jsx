@@ -88,7 +88,7 @@ function Contact({ profile }) {
               </Button>
               
               <Button 
-                href={profile?.resume ? `http://localhost:5000${profile.resume}` : "#"}
+                href={profile?.resume ? `https://portfolio-backend-oiq9.onrender.com${profile.resume}` : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="outline-primary" 

@@ -1,7 +1,7 @@
 // src/api/api.js
 import axios from "axios";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://portfolio-backend-oiq9.onrender.com/api";
 
 /* ================= PUBLIC PROJECTS (portfolio site) ================= */
 export const getPublicProjects = async () => {
