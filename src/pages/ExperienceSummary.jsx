@@ -1,164 +1,183 @@
-import React from 'react';
-import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
-import { 
-  FaBriefcase, 
-  FaChartLine, 
-  FaRocket, 
-  FaUsers, 
-  FaLightbulb,
-  FaHandshake
-} from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Badge } from "react-bootstrap";
+import {
+  FaBriefcase,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaExternalLinkAlt,
+  FaGithub,
+} from "react-icons/fa";
+import { getPublicExperiences } from "../api/api";
 
 const ExperienceSummary = () => {
-  const highlights = [
-    {
-      id: 1,
-      icon: <FaBriefcase size={28} />,
-      title: "Professional Experience",
-      description: "1+ years in full-stack development, specializing in React, Node.js, and cloud technologies",
-      stats: "1+ Years",
-      color: "primary",
-      emoji: "💼"
-    },
-    {
-      id: 2,
-      icon: <FaChartLine size={28} />,
-      title: "Technical Expertise",
-      description: "Modern web applications, REST APIs, database design, and scalable architecture",
-      stats: "15+ Projects",
-      color: "success",
-      emoji: "🎯"
-    },
-    {
-      id: 3,
-      icon: <FaRocket size={28} />,
-      title: "Project Delivery",
-      description: "2+ successful projects delivered on time with high client satisfaction",
-      stats: "100% Success",
-      color: "warning",
-      emoji: "🚀"
-    },
-    {
-      id: 4,
-      icon: <FaUsers size={28} />,
-      title: "Team Collaboration",
-      description: "Experienced in collaborating with teams on GitHub, managing pull requests, code reviews,",
-      stats: "1+ Teams",
-      color: "info",
-      emoji: "👥"
-    },
-    {
-      id: 5,
-      icon: <FaLightbulb size={28} />,
-      title: "Problem Solving",
-      description: "Strong analytical skills with focus on innovative technical solutions",
-      stats: "20+ Solutions",
-      color: "danger",
-      emoji: "💡"
-    },
-    {
-      id: 6,
-      icon: <FaHandshake size={28} />,
-      title: "Client Relations",
-      description: "Proven track record of maintaining strong client relationships and satisfaction",
-      stats: "95% Rating",
-      color: "purple",
-      emoji: "🤝"
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const res = await getPublicExperiences();
+      setData(res);
+    } catch (err) {
+      console.error(err);
     }
-  ];
+  };
 
   return (
-    <section id="experience" className="py-5 bg-light">
+    <section
+      id="experience"
+      className="py-5"
+      style={{
+        background: "linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%)",
+      }}
+    >
       <Container>
-        {/* Section Header */}
+
+        {/* HEADER */}
         <Row className="mb-5">
           <Col lg={8} className="mx-auto text-center">
-            <Badge 
-              bg="primary" 
-              className="px-4 py-2 mb-3 rounded-pill fw-medium d-inline-flex align-items-center shadow-sm"
+            <Badge
+              bg="primary"
+              className="px-4 py-2 mb-3 rounded-pill shadow-sm"
             >
               <FaBriefcase className="me-2" />
               Professional Journey
             </Badge>
-            <h2 className="display-5 fw-bold mb-3">Experience Highlights</h2>
-            <p className="lead text-muted mb-4">
-              Key experience and expertise areas
-            </p>
-            <div className="bg-primary mx-auto mb-4" 
-                 style={{ width: '60px', height: '3px' }}></div>
+
+              <h2 className="display-5 fw-bold mb-3">Experience</h2>
+            <p className="lead text-muted mb-4">Work & project highlights</p>
           </Col>
         </Row>
 
-        {/* Highlights Grid */}
+        {/* EXPERIENCE */}
         <Row className="g-4">
-          {highlights.map((item) => (
-            <Col lg={4} md={6} key={item.id}>
-              <Card className="border-0 shadow-sm h-100 hover-lift transition-all">
-                <Card.Body className="p-4 d-flex flex-column">
-                  {/* Icon Section */}
-                  <div className="d-flex align-items-center mb-3">
-                    <div className={`bg-${item.color} bg-opacity-10 text-${item.color} rounded-3 p-3 me-3`}>
-                      {item.icon}
-                    </div>
-                    <div className="ms-2">
-                      <span className="fs-3">{item.emoji}</span>
-                    </div>
+          {data.length === 0 ? (
+            <p className="text-center text-muted">No experience added</p>
+          ) : (
+            data.map((item, index) => (
+              <Col md={6} key={index}>
+                <div
+                  className="p-4 h-100"
+                  style={{
+                    background: "rgba(255,255,255,0.8)",
+                    backdropFilter: "blur(10px)",
+                    borderRadius: "16px",
+                    border: "1px solid rgba(99,102,241,0.1)",
+                    transition: "all 0.3s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-6px)";
+                    e.currentTarget.style.boxShadow =
+                      "0 12px 30px rgba(0,0,0,0.08)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  {/* TOP */}
+                  <div className="d-flex justify-content-between mb-2">
+                    <h5 className="fw-bold mb-0">{item.title}</h5>
+
+                    <Badge
+                      style={{
+                        background: "#6366f1",
+                        padding: "6px 12px",
+                        fontSize: "0.75rem",
+                      }}
+                    >
+                      {item.type}
+                    </Badge>
                   </div>
 
-                  {/* Title */}
-                  <h4 className="fw-bold mb-3">{item.title}</h4>
+                  {/* ROLE */}
+                  <p className="text-muted mb-2 small">
+                    {item.role} • {item.organization}
+                  </p>
 
-                  {/* Description */}
-                  <p className="text-muted mb-4 flex-grow-1">
+                  {/* META */}
+                  <div className="text-muted small mb-3 d-flex flex-wrap gap-3">
+                    <span>
+                      <FaCalendarAlt className="me-1" />
+                      {item.startDate} -{" "}
+                      {item.current ? "Present" : item.endDate}
+                    </span>
+
+                    {item.location && (
+                      <span>
+                        <FaMapMarkerAlt className="me-1" />
+                        {item.location}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* DESCRIPTION */}
+                  <p
+                    className="mb-3"
+                    style={{ fontSize: "0.95rem", lineHeight: "1.6" }}
+                  >
                     {item.description}
                   </p>
 
-                  {/* Stats Badge */}
-                  <div className="mt-auto">
-                    <Badge 
-                      bg={item.color} 
-                      className="px-3 py-2 d-inline-flex align-items-center fw-medium"
-                      style={{ fontSize: '0.9rem' }}
-                    >
-                      {item.stats}
-                    </Badge>
+                  {/* TECH STACK */}
+                  {item.technologies?.length > 0 && (
+                    <div className="mb-3">
+                      {item.technologies.map((tech, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            background: "#eef2ff",
+                            color: "#4f46e5",
+                            padding: "5px 10px",
+                            borderRadius: "8px",
+                            fontSize: "0.75rem",
+                            marginRight: "6px",
+                            display: "inline-block",
+                            marginBottom: "6px",
+                          }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* LINKS */}
+                  <div className="d-flex gap-3 mt-auto">
+                    {item.link && (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-decoration-none fw-medium d-flex align-items-center gap-1"
+                        style={{ color: "#6366f1" }}
+                      >
+                        <FaExternalLinkAlt size={12} />
+                        Live
+                      </a>
+                    )}
+
+                    {item.githubUrl && (
+                      <a
+                        href={item.githubUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-decoration-none fw-medium d-flex align-items-center gap-1"
+                        style={{ color: "#111827" }}
+                      >
+                        <FaGithub size={14} />
+                        Code
+                      </a>
+                    )}
                   </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+                </div>
+              </Col>
+            ))
+          )}
         </Row>
 
-        {/* Experience Summary Card */}
-
-
-        {/* Quick Stats */}
-        <Row className="mt-4 g-3">
-          <Col md={3} sm={6}>
-            <div className="text-center p-3 bg-white rounded-3 border">
-              <div className="fs-2 fw-bold text-primary mb-1">1+</div>
-              <div className="text-muted small">Years Experience</div>
-            </div>
-          </Col>
-          <Col md={3} sm={6}>
-            <div className="text-center p-3 bg-white rounded-3 border">
-              <div className="fs-2 fw-bold text-success mb-1">15+</div>
-              <div className="text-muted small">Projects Delivered</div>
-            </div>
-          </Col>
-          <Col md={3} sm={6}>
-            <div className="text-center p-3 bg-white rounded-3 border">
-              <div className="fs-2 fw-bold text-warning mb-1">100%</div>
-              <div className="text-muted small">Success Rate</div>
-            </div>
-          </Col>
-          <Col md={3} sm={6}>
-            <div className="text-center p-3 bg-white rounded-3 border">
-              <div className="fs-2 fw-bold text-info mb-1">95%</div>
-              <div className="text-muted small">Client Satisfaction</div>
-            </div>
-          </Col>
-        </Row>
       </Container>
     </section>
   );

@@ -42,3 +42,13 @@ export const getPublicCertificates = async () => {
   const res = await axios.get(`${API_BASE}/certificates`);
   return res.data;
 };
+
+export const getPublicExperiences = async () => {
+  const res = await axios.get(`${API_BASE}/experiences`);
+  return res.data;
+};
+
+export const sendContactMessage = async (data) => {
+  const res = await axios.post(`${API_BASE}/contact`, data);
+  return res.data;
+};
