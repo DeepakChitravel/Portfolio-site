@@ -610,40 +610,6 @@ const ProjectsSection = () => {
           </Row>
         )}
 
-        {/* Stats Section - Responsive grid */}
-        <Row className="mt-5 g-3">
-          <Col xs={6} md={3}>
-            <div className="text-center p-3 bg-white rounded-3 shadow-sm">
-              <div className="fs-2 fw-bold text-primary mb-1">{projects.length}</div>
-              <div className="text-muted small">Total Projects</div>
-            </div>
-          </Col>
-          <Col xs={6} md={3}>
-            <div className="text-center p-3 bg-white rounded-3 shadow-sm">
-              <div className="fs-2 fw-bold text-success mb-1">
-                {projects.filter(p => p.liveUrl && p.liveUrl !== '#').length}
-              </div>
-              <div className="text-muted small">Live Demos</div>
-            </div>
-          </Col>
-          <Col xs={6} md={3}>
-            <div className="text-center p-3 bg-white rounded-3 shadow-sm">
-              <div className="fs-2 fw-bold text-warning mb-1">
-                {new Set(projects.flatMap(p => p.technologies || [])).size}
-              </div>
-              <div className="text-muted small">Technologies</div>
-            </div>
-          </Col>
-          <Col xs={6} md={3}>
-            <div className="text-center p-3 bg-white rounded-3 shadow-sm">
-              <div className="fs-2 fw-bold text-info mb-1">
-                {projects.length > 0 ? Math.round(projects.filter(p => p.githubUrl && p.githubUrl !== '#').length / projects.length * 100) : 0}%
-              </div>
-              <div className="text-muted small">Open Source</div>
-            </div>
-          </Col>
-        </Row>
-
         {/* Interactive Hint - Responsive */}
         <Row className="mt-4">
           <Col className="text-center">

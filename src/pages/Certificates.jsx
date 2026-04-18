@@ -246,37 +246,6 @@ const CertificationsSection = () => {
               ))}
             </Row>
 
-            {/* Stats Row */}
-            <Row className="mt-4 g-3">
-              <Col md={3} sm={6}>
-                <div className="text-center p-3 bg-light rounded-3 border">
-                  <div className="fs-2 fw-bold text-primary mb-1">{certifications.length}</div>
-                  <div className="text-muted small">Certifications</div>
-                </div>
-              </Col>
-              <Col md={3} sm={6}>
-                <div className="text-center p-3 bg-light rounded-3 border">
-                  <div className="fs-2 fw-bold text-success mb-1">
-                    {new Set(certifications.map(c => c.category)).size}
-                  </div>
-                  <div className="text-muted small">Categories</div>
-                </div>
-              </Col>
-              <Col md={3} sm={6}>
-                <div className="text-center p-3 bg-light rounded-3 border">
-                  <div className="fs-2 fw-bold text-warning mb-1">
-                    {new Set(certifications.flatMap(c => c.skills || [])).size}
-                  </div>
-                  <div className="text-muted small">Skills Covered</div>
-                </div>
-              </Col>
-              <Col md={3} sm={6}>
-                <div className="text-center p-3 bg-light rounded-3 border">
-                  <div className="fs-2 fw-bold text-info mb-1">100%</div>
-                  <div className="text-muted small">Verified</div>
-                </div>
-              </Col>
-            </Row>
 
             {/* View All Button */}
             <Row className="mt-5">

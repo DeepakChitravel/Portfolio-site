@@ -36,8 +36,8 @@ function Contact({ profile }) {
   const [formStatus, setFormStatus] = useState({ success: false, message: "" });
 
   return (
-    <section id="contact" className="py-5" style={{ 
-      background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)" 
+    <section id="contact" className="py-5" style={{
+      background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)"
     }}>
       <Container>
         {/* Header */}
@@ -47,8 +47,8 @@ function Contact({ profile }) {
               <FaPaperPlane className="text-primary" size={14} />
               <span className="fw-medium text-dark">Get In Touch</span>
             </div>
-            
-            <h2 className="display-5 fw-bold mb-3" style={{ 
+
+            <h2 className="display-5 fw-bold mb-3" style={{
               background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent"
@@ -57,9 +57,9 @@ function Contact({ profile }) {
             </h2>
             <div
               className="mx-auto mb-4"
-              style={{ 
-                width: "80px", 
-                height: "4px", 
+              style={{
+                width: "80px",
+                height: "4px",
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 borderRadius: "2px"
               }}
@@ -74,7 +74,7 @@ function Contact({ profile }) {
         {/* Contact Info Cards */}
         <Row className="g-4 justify-content-center mb-5">
           <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{ 
+            <Card className="h-100 border-0 shadow-sm contact-card" style={{
               borderRadius: "20px",
               transition: "all 0.3s ease"
             }}>
@@ -92,7 +92,7 @@ function Contact({ profile }) {
           </Col>
 
           <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{ 
+            <Card className="h-100 border-0 shadow-sm contact-card" style={{
               borderRadius: "20px",
               transition: "all 0.3s ease"
             }}>
@@ -110,7 +110,7 @@ function Contact({ profile }) {
           </Col>
 
           <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{ 
+            <Card className="h-100 border-0 shadow-sm contact-card" style={{
               borderRadius: "20px",
               transition: "all 0.3s ease"
             }}>
@@ -128,7 +128,7 @@ function Contact({ profile }) {
           </Col>
 
           <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{ 
+            <Card className="h-100 border-0 shadow-sm contact-card" style={{
               borderRadius: "20px",
               transition: "all 0.3s ease"
             }}>
@@ -151,26 +151,26 @@ function Contact({ profile }) {
           <Col lg={8} className="text-center">
             <div className="d-flex justify-content-center gap-3">
               {profile?.linkedin && (
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" 
-                   className="social-link">
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer"
+                  className="social-link">
                   <FaLinkedin size={20} />
                 </a>
               )}
               {profile?.github && (
                 <a href={profile.github} target="_blank" rel="noopener noreferrer"
-                   className="social-link">
+                  className="social-link">
                   <FaGithub size={20} />
                 </a>
               )}
               {profile?.twitter && (
                 <a href={profile.twitter} target="_blank" rel="noopener noreferrer"
-                   className="social-link">
+                  className="social-link">
                   <FaTwitter size={20} />
                 </a>
               )}
               {profile?.website && (
                 <a href={profile.website} target="_blank" rel="noopener noreferrer"
-                   className="social-link">
+                  className="social-link">
                   <FaGlobe size={20} />
                 </a>
               )}
@@ -231,8 +231,8 @@ function Contact({ profile }) {
         {formStatus.success && (
           <Row className="mt-4">
             <Col lg={10} className="mx-auto">
-              <div className="alert alert-success border-0 shadow-sm d-flex align-items-center" 
-                   style={{ borderRadius: "16px", background: "#10b981", color: "white" }}>
+              <div className="alert alert-success border-0 shadow-sm d-flex align-items-center"
+                style={{ borderRadius: "16px", background: "#10b981", color: "white" }}>
                 <FaCheckCircle className="me-3" size={24} />
                 <div>
                   <strong>Message Sent Successfully!</strong>
@@ -311,27 +311,39 @@ function ContactForm({ profile }) {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!form.name.trim()) {
       newErrors.name = "Name is required";
     } else if (form.name.length < 2) {
       newErrors.name = "Name must be at least 2 characters";
     }
-    
+
     if (!form.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
       newErrors.email = "Please enter a valid email";
     }
-    
+
     if (!form.message.trim()) {
       newErrors.message = "Message is required";
     } else if (form.message.length < 10) {
       newErrors.message = "Message must be at least 10 characters";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -347,7 +359,7 @@ function ContactForm({ profile }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       toast.error("Please fix the errors before submitting");
       return;
@@ -364,33 +376,37 @@ function ContactForm({ profile }) {
       };
 
       const response = await sendContactMessage(payload);
-      
+
       if (response.success) {
         setSubmitted(true);
         toast.success("🎉 Message sent successfully! I'll get back to you soon.");
+
         setForm({ name: "", email: "", subject: "", message: "" });
         setErrors({});
+
+        // 🔥 START 3 MIN COOLDOWN
+        setCooldown(180);
       } else {
         throw new Error(response.message || "Failed to send message");
       }
     } catch (error) {
-  console.error("Contact form error:", error);
+      console.error("Contact form error:", error);
 
-  toast.error("❌ Failed to send message. Try again later.");
-} finally {
+      toast.error("❌ Failed to send message. Try again later.");
+    } finally {
       setLoading(false);
     }
   };
 
   if (submitted) {
     return (
-      <div className="bg-white shadow-sm rounded-4 p-5 text-center" style={{ 
+      <div className="bg-white shadow-sm rounded-4 p-5 text-center" style={{
         borderRadius: "24px",
         background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
       }}>
         <div className="mb-4">
-          <div className="d-inline-flex align-items-center justify-content-center p-4 rounded-circle" 
-               style={{ background: "linear-gradient(135deg, #10b98120 0%, #05966920 100%)" }}>
+          <div className="d-inline-flex align-items-center justify-content-center p-4 rounded-circle"
+            style={{ background: "linear-gradient(135deg, #10b98120 0%, #05966920 100%)" }}>
             <FaCheckCircle size={48} style={{ color: "#10b981" }} />
           </div>
         </div>
@@ -410,7 +426,7 @@ function ContactForm({ profile }) {
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-4 p-4 p-md-5" style={{ 
+    <div className="bg-white shadow-lg rounded-4 p-4 p-md-5" style={{
       borderRadius: "24px",
       background: "linear-gradient(135deg, #ffffff 0%, #fafbfc 100%)",
       border: "1px solid rgba(102, 126, 234, 0.1)"
@@ -430,12 +446,12 @@ function ContactForm({ profile }) {
           <Col md={6}>
             <Form.Group>
               <Form.Label className="fw-semibold small text-secondary">Full Name *</Form.Label>
-              <InputGroup style={{ 
+              <InputGroup style={{
                 borderRadius: "12px",
                 boxShadow: errors.name ? "0 0 0 2px rgba(239, 68, 68, 0.1)" : "none"
               }}>
-                <InputGroup.Text style={{ 
-                  background: "#f8fafc", 
+                <InputGroup.Text style={{
+                  background: "#f8fafc",
                   border: errors.name ? "1px solid #ef4444" : "1px solid #e2e8f0",
                   borderRight: "none",
                   borderRadius: "12px 0 0 12px"
@@ -466,12 +482,12 @@ function ContactForm({ profile }) {
           <Col md={6}>
             <Form.Group>
               <Form.Label className="fw-semibold small text-secondary">Email Address *</Form.Label>
-              <InputGroup style={{ 
+              <InputGroup style={{
                 borderRadius: "12px",
                 boxShadow: errors.email ? "0 0 0 2px rgba(239, 68, 68, 0.1)" : "none"
               }}>
-                <InputGroup.Text style={{ 
-                  background: "#f8fafc", 
+                <InputGroup.Text style={{
+                  background: "#f8fafc",
                   border: errors.email ? "1px solid #ef4444" : "1px solid #e2e8f0",
                   borderRight: "none",
                   borderRadius: "12px 0 0 12px"
@@ -504,8 +520,8 @@ function ContactForm({ profile }) {
             <Form.Group>
               <Form.Label className="fw-semibold small text-secondary">Subject (Optional)</Form.Label>
               <InputGroup style={{ borderRadius: "12px" }}>
-                <InputGroup.Text style={{ 
-                  background: "#f8fafc", 
+                <InputGroup.Text style={{
+                  background: "#f8fafc",
                   border: "1px solid #e2e8f0",
                   borderRight: "none",
                   borderRadius: "12px 0 0 12px"
@@ -532,12 +548,12 @@ function ContactForm({ profile }) {
           <Col xs={12}>
             <Form.Group>
               <Form.Label className="fw-semibold small text-secondary">Message *</Form.Label>
-              <InputGroup style={{ 
+              <InputGroup style={{
                 borderRadius: "12px",
                 boxShadow: errors.message ? "0 0 0 2px rgba(239, 68, 68, 0.1)" : "none"
               }}>
-                <InputGroup.Text style={{ 
-                  background: "#f8fafc", 
+                <InputGroup.Text style={{
+                  background: "#f8fafc",
                   border: errors.message ? "1px solid #ef4444" : "1px solid #e2e8f0",
                   borderRight: "none",
                   borderRadius: "12px 0 0 12px",
@@ -578,7 +594,7 @@ function ContactForm({ profile }) {
           <Col xs={12}>
             <Button
               type="submit"
-              disabled={loading}
+              disabled={loading || cooldown > 0}
               className="w-100 d-flex align-items-center justify-content-center gap-2 py-3"
               style={{
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
@@ -598,17 +614,23 @@ function ContactForm({ profile }) {
                 e.currentTarget.style.boxShadow = "0 10px 25px rgba(102, 126, 234, 0.3)";
               }}
             >
-              {loading ? (
-                <>
-                  <Spinner animation="border" size="sm" />
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <FaPaperPlane />
-                  Send Message
-                </>
-              )}
+         {loading ? (
+  <>
+    <Spinner animation="border" size="sm" />
+    Sending...
+  </>
+) : cooldown > 0 ? (
+  <>
+    <FaClock />
+    Wait {Math.floor(cooldown / 60)}:
+    {String(cooldown % 60).padStart(2, "0")}
+  </>
+) : (
+  <>
+    <FaPaperPlane />
+    Send Message
+  </>
+)}
             </Button>
             <p className="text-center text-muted small mt-3 mb-0">
               <FaClock className="me-1" size={12} />
