@@ -15,8 +15,8 @@ const ExperienceSummary = () => {
       id: 1,
       icon: <FaBriefcase size={28} />,
       title: "Professional Experience",
-      description: "2+ years in full-stack development, specializing in React, Node.js, and cloud technologies",
-      stats: "2+ Years",
+      description: "1+ years in full-stack development, specializing in React, Node.js, and cloud technologies",
+      stats: "1+ Years",
       color: "primary",
       emoji: "💼"
     },
@@ -33,7 +33,7 @@ const ExperienceSummary = () => {
       id: 3,
       icon: <FaRocket size={28} />,
       title: "Project Delivery",
-      description: "15+ successful projects delivered on time with high client satisfaction",
+      description: "2+ successful projects delivered on time with high client satisfaction",
       stats: "100% Success",
       color: "warning",
       emoji: "🚀"
@@ -42,8 +42,8 @@ const ExperienceSummary = () => {
       id: 4,
       icon: <FaUsers size={28} />,
       title: "Team Collaboration",
-      description: "Experienced in Agile methodologies and cross-functional team leadership",
-      stats: "10+ Teams",
+      description: "Experienced in collaborating with teams on GitHub, managing pull requests, code reviews,",
+      stats: "1+ Teams",
       color: "info",
       emoji: "👥"
     },
@@ -52,7 +52,7 @@ const ExperienceSummary = () => {
       icon: <FaLightbulb size={28} />,
       title: "Problem Solving",
       description: "Strong analytical skills with focus on innovative technical solutions",
-      stats: "50+ Solutions",
+      stats: "20+ Solutions",
       color: "danger",
       emoji: "💡"
     },
@@ -136,7 +136,7 @@ const ExperienceSummary = () => {
         <Row className="mt-4 g-3">
           <Col md={3} sm={6}>
             <div className="text-center p-3 bg-white rounded-3 border">
-              <div className="fs-2 fw-bold text-primary mb-1">2+</div>
+              <div className="fs-2 fw-bold text-primary mb-1">1+</div>
               <div className="text-muted small">Years Experience</div>
             </div>
           </Col>

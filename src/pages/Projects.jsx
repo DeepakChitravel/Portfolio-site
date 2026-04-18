@@ -13,7 +13,8 @@ import {
   FaStar,
   FaChevronLeft,
   FaChevronRight,
-  FaImages
+  FaImages,
+  FaMobile
 } from 'react-icons/fa';
 
 const ProjectsSection = () => {
@@ -21,11 +22,42 @@ const ProjectsSection = () => {
   const [loading, setLoading] = useState(true);
   const [hoveredProject, setHoveredProject] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const imageRefs = useRef({});
   const scrollIntervals = useRef({});
   const carouselRef = useRef(null);
   
-  const projectsPerPage = 3;
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Adjust items per page based on screen size
+  const getProjectsPerPage = () => {
+    if (window.innerWidth < 768) return 1;
+    if (window.innerWidth < 992) return 2;
+    return 3;
+  };
+
+  const [projectsPerPage, setProjectsPerPage] = useState(getProjectsPerPage());
+
+  // Update projects per page on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setProjectsPerPage(getProjectsPerPage());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const totalPages = Math.ceil(projects.length / projectsPerPage);
   const startIndex = currentPage * projectsPerPage;
   const visibleProjects = projects.slice(startIndex, startIndex + projectsPerPage);
@@ -268,20 +300,35 @@ const ProjectsSection = () => {
           </Col>
         </Row>
 
+        {/* Mobile/Desktop indicator */}
+        {isMobile && (
+          <Row className="mb-3">
+            <Col className="text-center">
+              <Badge bg="info" className="px-3 py-2">
+                <FaMobile className="me-2" />
+                Swipe or use arrows to navigate
+              </Badge>
+            </Col>
+          </Row>
+        )}
+
         {/* Projects Carousel */}
         <div ref={carouselRef} className="position-relative">
-          {/* Navigation Buttons - Only show if more than 3 projects */}
-          {projects.length > 3 && (
+          {/* Navigation Buttons - Always show on mobile, only when needed on desktop */}
+          {projects.length > projectsPerPage && (
             <>
               <Button
                 variant="light"
-                className="position-absolute top-50 start-0 translate-middle-y z-3 shadow-lg rounded-circle"
+                className={`position-absolute top-50 start-0 translate-middle-y z-3 shadow-lg rounded-circle ${
+                  isMobile ? 'd-flex' : 'd-none d-lg-flex'
+                }`}
                 style={{ 
-                  left: '-20px',
-                  width: '48px', 
-                  height: '48px',
+                  left: isMobile ? '0' : '-20px',
+                  width: isMobile ? '40px' : '48px', 
+                  height: isMobile ? '40px' : '48px',
                   opacity: currentPage === 0 ? 0.5 : 1,
-                  cursor: currentPage === 0 ? 'not-allowed' : 'pointer'
+                  cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
+                  zIndex: 10
                 }}
                 onClick={handlePrevPage}
                 disabled={currentPage === 0}
@@ -291,13 +338,16 @@ const ProjectsSection = () => {
               
               <Button
                 variant="light"
-                className="position-absolute top-50 end-0 translate-middle-y z-3 shadow-lg rounded-circle"
+                className={`position-absolute top-50 end-0 translate-middle-y z-3 shadow-lg rounded-circle ${
+                  isMobile ? 'd-flex' : 'd-none d-lg-flex'
+                }`}
                 style={{ 
-                  right: '-20px',
-                  width: '48px', 
-                  height: '48px',
+                  right: isMobile ? '0' : '-20px',
+                  width: isMobile ? '40px' : '48px', 
+                  height: isMobile ? '40px' : '48px',
                   opacity: currentPage === totalPages - 1 ? 0.5 : 1,
-                  cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer'
+                  cursor: currentPage === totalPages - 1 ? 'not-allowed' : 'pointer',
+                  zIndex: 10
                 }}
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages - 1}
@@ -307,31 +357,39 @@ const ProjectsSection = () => {
             </>
           )}
 
-          {/* Projects Grid */}
+          {/* Projects Grid - Responsive columns */}
           <Row className="g-4 justify-content-center">
             {visibleProjects.map((project) => (
-              <Col lg={4} md={6} key={project._id}>
+              <Col 
+                xs={12} 
+                md={projectsPerPage === 1 ? 10 : 6} 
+                lg={4} 
+                key={project._id}
+                className="mx-auto"
+              >
                 <Card 
                   className="border-0 shadow-sm h-100"
-                  onMouseEnter={() => startAutoScroll(project._id)}
-                  onMouseLeave={() => stopAutoScroll(project._id)}
+                  onMouseEnter={() => !isMobile && startAutoScroll(project._id)}
+                  onMouseLeave={() => !isMobile && stopAutoScroll(project._id)}
+                  onTouchStart={() => isMobile && startAutoScroll(project._id)}
+                  onTouchEnd={() => isMobile && stopAutoScroll(project._id)}
                   style={{ 
                     transition: 'all 0.3s ease',
-                    transform: hoveredProject === project._id ? 'translateY(-8px)' : 'translateY(0)',
+                    transform: hoveredProject === project._id && !isMobile ? 'translateY(-8px)' : 'translateY(0)',
                   }}
                 >
-                  {/* Project Image Container - Auto-scroll enabled */}
+                  {/* Project Image Container */}
                   <div 
                     className="position-relative" 
                     style={{ 
-                      height: '300px',
+                      height: isMobile ? '250px' : '300px',
                       backgroundColor: '#f8f9fa',
                       overflow: 'hidden',
                       borderTopLeftRadius: 'calc(0.375rem - 1px)',
                       borderTopRightRadius: 'calc(0.375rem - 1px)',
                     }}
                   >
-                    {/* Image with proper sizing for auto-scroll */}
+                    {/* Image */}
                     <img 
                       ref={el => imageRefs.current[project._id] = el}
                       src={project.image}
@@ -341,19 +399,14 @@ const ProjectsSection = () => {
                         height: 'auto',
                         display: 'block',
                         transform: 'translateY(0)',
-                        pointerEvents: 'none', // Prevents image from interfering with hover
+                        pointerEvents: 'none',
                       }}
                       onError={(e) => {
                         e.target.src = 'https://via.placeholder.com/800x600?text=Project+Image';
                       }}
-                      onLoad={(e) => {
-                        // Preload image dimensions
-                        const img = e.target;
-                        img.setAttribute('data-loaded', 'true');
-                      }}
                     />
                     
-                    {/* Gradient Overlay for better text readability */}
+                    {/* Gradient Overlay */}
                     <div className="position-absolute top-0 start-0 w-100 h-100"
                          style={{
                            background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.1) 100%)',
@@ -361,7 +414,15 @@ const ProjectsSection = () => {
                          }}>
                     </div>
                     
-
+                    {/* Auto-scroll Indicator for mobile */}
+                    {isMobile && (
+                      <div className="position-absolute top-0 start-0 w-100 h-10 p-2 text-center">
+                        <Badge bg="dark" className="px-2 py-1 opacity-75">
+                          <FaImages className="me-1" size={10} />
+                          Touch & hold to scroll
+                        </Badge>
+                      </div>
+                    )}
                     
                     {/* Featured Badge */}
                     <div className="position-absolute top-0 end-0 m-3">
@@ -386,7 +447,9 @@ const ProjectsSection = () => {
                     {/* Project Title and Type */}
                     <div className="mb-3">
                       <div className="d-flex justify-content-between align-items-start mb-2">
-                        <h4 className="fw-bold mb-0" style={{ fontSize: '1.25rem' }}>{project.title}</h4>
+                        <h4 className="fw-bold mb-0" style={{ fontSize: isMobile ? '1.1rem' : '1.25rem' }}>
+                          {project.title}
+                        </h4>
                         <Badge bg="primary" className="px-2 py-1" style={{ fontSize: '0.7rem' }}>
                           Web App
                         </Badge>
@@ -401,9 +464,12 @@ const ProjectsSection = () => {
                     </div>
 
                     {/* Project Description */}
-                    <p className="text-secondary mb-4" style={{ lineHeight: '1.6', fontSize: '0.95rem' }}>
-                      {project.description.length > 100 
-                        ? `${project.description.substring(0, 100)}...` 
+                    <p className="text-secondary mb-4" style={{ 
+                      lineHeight: '1.6', 
+                      fontSize: isMobile ? '0.9rem' : '0.95rem' 
+                    }}>
+                      {project.description.length > (isMobile ? 80 : 100) 
+                        ? `${project.description.substring(0, isMobile ? 80 : 100)}...` 
                         : project.description}
                     </p>
 
@@ -415,7 +481,7 @@ const ProjectsSection = () => {
                           <h6 className="fw-bold mb-0" style={{ fontSize: '0.9rem' }}>Tech Stack</h6>
                         </div>
                         <div className="d-flex flex-wrap gap-2">
-                          {project.technologies.slice(0, 3).map((tech, index) => (
+                          {project.technologies.slice(0, isMobile ? 2 : 3).map((tech, index) => (
                             <Badge 
                               key={index}
                               bg="light" 
@@ -426,14 +492,14 @@ const ProjectsSection = () => {
                               {tech}
                             </Badge>
                           ))}
-                          {project.technologies.length > 3 && (
+                          {project.technologies.length > (isMobile ? 2 : 3) && (
                             <Badge 
                               bg="light" 
                               text="dark" 
                               className="px-3 py-2 rounded-pill border"
                               style={{ fontSize: '0.75rem' }}
                             >
-                              +{project.technologies.length - 3}
+                              +{project.technologies.length - (isMobile ? 2 : 3)}
                             </Badge>
                           )}
                         </div>
@@ -489,42 +555,70 @@ const ProjectsSection = () => {
           </Row>
         </div>
 
-        {/* Pagination Indicators */}
-        {projects.length > 3 && (
+        {/* Pagination Indicators - Enhanced for mobile */}
+        {projects.length > projectsPerPage && (
           <Row className="mt-4">
             <Col className="d-flex justify-content-center align-items-center">
-              <div className="d-flex gap-2">
+              <div className="d-flex gap-2 align-items-center">
+                {/* Previous button for mobile (compact) */}
+                {isMobile && (
+                  <Button
+                    variant="link"
+                    className="p-0 me-2"
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 0}
+                    style={{ color: currentPage === 0 ? '#dee2e6' : '#0d6efd' }}
+                  >
+                    <FaChevronLeft size={16} />
+                  </Button>
+                )}
+                
+                {/* Page indicators */}
                 {Array.from({ length: totalPages }).map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentPage(index)}
                     className="btn btn-link p-0"
                     style={{ 
-                      width: '10px', 
-                      height: '10px',
+                      width: isMobile ? '12px' : '10px', 
+                      height: isMobile ? '12px' : '10px',
                       borderRadius: '50%',
                       backgroundColor: currentPage === index ? '#0d6efd' : '#dee2e6',
                       border: 'none',
                       transition: 'all 0.3s ease',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      transform: currentPage === index && isMobile ? 'scale(1.2)' : 'scale(1)'
                     }}
                     aria-label={`Go to page ${index + 1}`}
                   />
                 ))}
+                
+                {/* Next button for mobile (compact) */}
+                {isMobile && (
+                  <Button
+                    variant="link"
+                    className="p-0 ms-2"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages - 1}
+                    style={{ color: currentPage === totalPages - 1 ? '#dee2e6' : '#0d6efd' }}
+                  >
+                    <FaChevronRight size={16} />
+                  </Button>
+                )}
               </div>
             </Col>
           </Row>
         )}
 
-        {/* Stats Section */}
+        {/* Stats Section - Responsive grid */}
         <Row className="mt-5 g-3">
-          <Col md={3} sm={6}>
+          <Col xs={6} md={3}>
             <div className="text-center p-3 bg-white rounded-3 shadow-sm">
               <div className="fs-2 fw-bold text-primary mb-1">{projects.length}</div>
               <div className="text-muted small">Total Projects</div>
             </div>
           </Col>
-          <Col md={3} sm={6}>
+          <Col xs={6} md={3}>
             <div className="text-center p-3 bg-white rounded-3 shadow-sm">
               <div className="fs-2 fw-bold text-success mb-1">
                 {projects.filter(p => p.liveUrl && p.liveUrl !== '#').length}
@@ -532,7 +626,7 @@ const ProjectsSection = () => {
               <div className="text-muted small">Live Demos</div>
             </div>
           </Col>
-          <Col md={3} sm={6}>
+          <Col xs={6} md={3}>
             <div className="text-center p-3 bg-white rounded-3 shadow-sm">
               <div className="fs-2 fw-bold text-warning mb-1">
                 {new Set(projects.flatMap(p => p.technologies || [])).size}
@@ -540,7 +634,7 @@ const ProjectsSection = () => {
               <div className="text-muted small">Technologies</div>
             </div>
           </Col>
-          <Col md={3} sm={6}>
+          <Col xs={6} md={3}>
             <div className="text-center p-3 bg-white rounded-3 shadow-sm">
               <div className="fs-2 fw-bold text-info mb-1">
                 {projects.length > 0 ? Math.round(projects.filter(p => p.githubUrl && p.githubUrl !== '#').length / projects.length * 100) : 0}%
@@ -550,12 +644,13 @@ const ProjectsSection = () => {
           </Col>
         </Row>
 
-        {/* Interactive Hint */}
+        {/* Interactive Hint - Responsive */}
         <Row className="mt-4">
           <Col className="text-center">
-            <div className="text-muted small d-flex align-items-center justify-content-center bg-white p-3 rounded-3 shadow-sm d-inline-flex mx-auto" style={{ maxWidth: 'fit-content' }}>
+            <div className="text-muted small d-flex align-items-center justify-content-center bg-white p-3 rounded-3 shadow-sm d-inline-flex mx-auto" 
+                 style={{ maxWidth: 'fit-content', fontSize: isMobile ? '0.8rem' : '0.875rem' }}>
               <FaMousePointer className="me-2 text-primary" />
-              Hover over images for auto-scroll preview
+              {isMobile ? 'Touch & hold images to scroll preview' : 'Hover over images for auto-scroll preview'}
             </div>
           </Col>
         </Row>

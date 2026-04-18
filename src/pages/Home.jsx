@@ -95,14 +95,21 @@ function Home() {
     return `${startYear} - ${endYear}`;
   };
 
-  if (loading) {
-    return (
-      <div className="loading-screen">
-        <div className="loading-spinner"></div>
-        <p>Loading profile...</p>
+if (loading) {
+  return (
+    <div className="premium-loader">
+      <div className="loader-box">
+        <div className="logo-circle">D</div>
+
+        <div className="progress-bar">
+          <div className="progress-fill"></div>
+        </div>
+
+        <p className="loader-text">Preparing your portfolio</p>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   if (!profile) {
     return (
@@ -152,5 +159,6 @@ function getSkillIcon(skill) {
   };
   return iconMap[skill] || skill.charAt(0);
 }
+
 
 export default Home;
