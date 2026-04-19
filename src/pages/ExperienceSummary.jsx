@@ -38,15 +38,12 @@ const ExperienceSummary = () => {
         {/* HEADER */}
         <Row className="mb-5">
           <Col lg={8} className="mx-auto text-center">
-            <Badge
-              bg="primary"
-              className="px-4 py-2 mb-3 rounded-pill shadow-sm"
-            >
+            <Badge bg="primary" className="px-4 py-2 mb-3 rounded-pill shadow-sm">
               <FaBriefcase className="me-2" />
               Professional Journey
             </Badge>
 
-              <h2 className="display-5 fw-bold mb-3">Experience</h2>
+            <h2 className="display-5 fw-bold mb-3">Experience</h2>
             <p className="lead text-muted mb-4">Work & project highlights</p>
           </Col>
         </Row>
@@ -61,7 +58,7 @@ const ExperienceSummary = () => {
                 <div
                   className="p-4 h-100"
                   style={{
-                    background: "rgba(255,255,255,0.8)",
+                    background: "rgba(255,255,255,0.9)",
                     backdropFilter: "blur(10px)",
                     borderRadius: "16px",
                     border: "1px solid rgba(99,102,241,0.1)",
@@ -77,10 +74,49 @@ const ExperienceSummary = () => {
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  {/* TOP */}
-                  <div className="d-flex justify-content-between mb-2">
-                    <h5 className="fw-bold mb-0">{item.title}</h5>
+                  {/* TOP (Logo + Title + Badge) */}
+                  <div className="d-flex align-items-center justify-content-between mb-3">
 
+                    {/* LEFT */}
+                    <div className="d-flex align-items-center gap-2">
+
+                      {/* LOGO or FALLBACK */}
+                      {(item.image || item.logo) ? (
+                        <img
+                          src={item.image || item.logo}
+                          alt={item.organization}
+                          style={{
+                            width: "38px",
+                            height: "38px",
+                            objectFit: "contain",
+                            borderRadius: "8px",
+                            background: "#fff",
+                            padding: "4px",
+                            border: "1px solid #eee"
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: "38px",
+                            height: "38px",
+                            borderRadius: "8px",
+                            background: "#6366f1",
+                            color: "#fff",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontWeight: "bold"
+                          }}
+                        >
+                          {item.organization?.charAt(0)}
+                        </div>
+                      )}
+
+                      <h5 className="fw-bold mb-0">{item.title}</h5>
+                    </div>
+
+                    {/* BADGE */}
                     <Badge
                       style={{
                         background: "#6366f1",
@@ -90,6 +126,7 @@ const ExperienceSummary = () => {
                     >
                       {item.type}
                     </Badge>
+
                   </div>
 
                   {/* ROLE */}
@@ -101,8 +138,7 @@ const ExperienceSummary = () => {
                   <div className="text-muted small mb-3 d-flex flex-wrap gap-3">
                     <span>
                       <FaCalendarAlt className="me-1" />
-                      {item.startDate} -{" "}
-                      {item.current ? "Present" : item.endDate}
+                      {item.startDate} - {item.current ? "Present" : item.endDate}
                     </span>
 
                     {item.location && (
@@ -114,14 +150,11 @@ const ExperienceSummary = () => {
                   </div>
 
                   {/* DESCRIPTION */}
-                  <p
-                    className="mb-3"
-                    style={{ fontSize: "0.95rem", lineHeight: "1.6" }}
-                  >
+                  <p style={{ fontSize: "0.95rem", lineHeight: "1.6" }}>
                     {item.description}
                   </p>
 
-                  {/* TECH STACK */}
+                  {/* TECH */}
                   {item.technologies?.length > 0 && (
                     <div className="mb-3">
                       {item.technologies.map((tech, i) => (
@@ -172,6 +205,7 @@ const ExperienceSummary = () => {
                       </a>
                     )}
                   </div>
+
                 </div>
               </Col>
             ))
