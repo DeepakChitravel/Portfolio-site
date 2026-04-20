@@ -6,19 +6,14 @@ import {
   Button,
   Card,
   Form,
-  Toast,
-  ToastContainer,
   Spinner,
   InputGroup
 } from "react-bootstrap";
 import {
   FaEnvelope,
-  FaMapMarkerAlt,
-  FaBriefcase,
   FaPaperPlane,
   FaDownload,
   FaUser,
-  FaBuilding,
   FaComment,
   FaCheckCircle,
   FaClock,
@@ -26,8 +21,8 @@ import {
   FaGithub,
   FaTwitter,
   FaGlobe,
-  FaPhone,
-  FaCalendarAlt
+  FaPhoneAlt,
+  FaRegSmile
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { sendContactMessage } from "../api/api";
@@ -36,162 +31,103 @@ function Contact({ profile }) {
   const [formStatus, setFormStatus] = useState({ success: false, message: "" });
 
   return (
-    <section id="contact" className="py-5" style={{
+    <section id="contact" className="py-4 py-md-5 py-lg-5" style={{
       background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)"
     }}>
       <Container>
         {/* Header */}
-        <Row className="mb-5">
+        <Row className="mb-4 mb-md-5">
           <Col lg={8} className="mx-auto text-center">
-            <div className="d-inline-flex align-items-center gap-2 bg-white px-4 py-2 rounded-pill shadow-sm mb-4">
+            <div className="d-inline-flex align-items-center gap-2 bg-white px-3 px-md-4 py-2 rounded-pill shadow-sm mb-3 mb-md-4">
               <FaPaperPlane className="text-primary" size={14} />
-              <span className="fw-medium text-dark">Get In Touch</span>
+              <span className="fw-medium text-dark small">Get In Touch</span>
             </div>
 
-            <h2 className="display-5 fw-bold mb-3" style={{
+            <h2 className="display-6 display-md-5 display-lg-4 fw-bold mb-3" style={{
               background: "linear-gradient(135deg, #1e293b 0%, #334155 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent"
             }}>
-              Let's Work Together
+              Let's Connect
             </h2>
             <div
-              className="mx-auto mb-4"
+              className="mx-auto mb-3 mb-md-4"
               style={{
-                width: "80px",
-                height: "4px",
+                width: "60px",
+                height: "3px",
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 borderRadius: "2px"
               }}
             />
-            <p className="lead text-secondary" style={{ fontSize: "1.1rem" }}>
-              I'm currently available for full-time opportunities and freelance projects.
+            <p className="text-secondary px-2" style={{ fontSize: "0.95rem", maxWidth: "600px", margin: "0 auto" }}>
+              I'm always excited to collaborate on new projects and opportunities.
               Let's create something amazing together!
             </p>
           </Col>
         </Row>
 
-        {/* Contact Info Cards */}
-        <Row className="g-4 justify-content-center mb-5">
-          <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{
+        {/* Social Links Section */}
+        {/* <Row className="justify-content-center mb-4 mb-md-5">
+          <Col lg={8}>
+            <Card className="border-0 shadow-sm" style={{
               borderRadius: "20px",
-              transition: "all 0.3s ease"
+              background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
             }}>
-              <Card.Body className="text-center p-4">
-                <div className="icon-wrapper mb-4">
-                  <FaEnvelope size={28} />
+              <Card.Body className="p-3 p-md-4">
+              
+                <div className="d-flex justify-content-center gap-2 gap-md-3 flex-wrap">
+                  {profile?.linkedin && (
+                    <a href={profile.linkedin} target="_blank" rel="noopener noreferrer"
+                      className="social-link">
+                      <FaLinkedin size={20} />
+                    </a>
+                  )}
+                  {profile?.github && (
+                    <a href={profile.github} target="_blank" rel="noopener noreferrer"
+                      className="social-link">
+                      <FaGithub size={20} />
+                    </a>
+                  )}
+                  {profile?.twitter && (
+                    <a href={profile.twitter} target="_blank" rel="noopener noreferrer"
+                      className="social-link">
+                      <FaTwitter size={20} />
+                    </a>
+                  )}
+                  {profile?.website && (
+                    <a href={profile.website} target="_blank" rel="noopener noreferrer"
+                      className="social-link">
+                      <FaGlobe size={20} />
+                    </a>
+                  )}
+                  <a href={`mailto:${profile?.email || "deepakchitravel@gmail.com"}`}
+                    className="social-link">
+                    <FaEnvelope size={20} />
+                  </a>
+                  <a href="tel:+1234567890" className="social-link">
+                    <FaPhoneAlt size={20} />
+                  </a>
                 </div>
-                <h6 className="fw-bold mb-2" style={{ color: "#1e293b" }}>Email</h6>
-                <p className="text-primary mb-0" style={{ fontSize: "0.95rem" }}>
-                  {profile?.email || "deepakchitravel@gmail.com"}
-                </p>
-                <small className="text-muted">Response within 24 hours</small>
               </Card.Body>
             </Card>
           </Col>
-
-          <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{
-              borderRadius: "20px",
-              transition: "all 0.3s ease"
-            }}>
-              <Card.Body className="text-center p-4">
-                <div className="icon-wrapper mb-4">
-                  <FaMapMarkerAlt size={28} />
-                </div>
-                <h6 className="fw-bold mb-2" style={{ color: "#1e293b" }}>Location</h6>
-                <p className="mb-0" style={{ fontSize: "0.95rem", color: "#475569" }}>
-                  {profile?.location || "Tamil Nadu, India"}
-                </p>
-                <small className="text-muted">Remote / On-site</small>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{
-              borderRadius: "20px",
-              transition: "all 0.3s ease"
-            }}>
-              <Card.Body className="text-center p-4">
-                <div className="icon-wrapper mb-4">
-                  <FaBriefcase size={28} />
-                </div>
-                <h6 className="fw-bold mb-2" style={{ color: "#1e293b" }}>Availability</h6>
-                <p className="text-success mb-0" style={{ fontSize: "0.95rem", fontWeight: "500" }}>
-                  Open to Opportunities
-                </p>
-                <small className="text-muted">Full-time • Freelance</small>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col lg={3} md={6}>
-            <Card className="h-100 border-0 shadow-sm contact-card" style={{
-              borderRadius: "20px",
-              transition: "all 0.3s ease"
-            }}>
-              <Card.Body className="text-center p-4">
-                <div className="icon-wrapper mb-4">
-                  <FaCalendarAlt size={28} />
-                </div>
-                <h6 className="fw-bold mb-2" style={{ color: "#1e293b" }}>Timezone</h6>
-                <p className="mb-0" style={{ fontSize: "0.95rem", color: "#475569" }}>
-                  IST (UTC+5:30)
-                </p>
-                <small className="text-muted">India Standard Time</small>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
-        {/* Social Links */}
-        <Row className="justify-content-center mb-5">
-          <Col lg={8} className="text-center">
-            <div className="d-flex justify-content-center gap-3">
-              {profile?.linkedin && (
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer"
-                  className="social-link">
-                  <FaLinkedin size={20} />
-                </a>
-              )}
-              {profile?.github && (
-                <a href={profile.github} target="_blank" rel="noopener noreferrer"
-                  className="social-link">
-                  <FaGithub size={20} />
-                </a>
-              )}
-              {profile?.twitter && (
-                <a href={profile.twitter} target="_blank" rel="noopener noreferrer"
-                  className="social-link">
-                  <FaTwitter size={20} />
-                </a>
-              )}
-              {profile?.website && (
-                <a href={profile.website} target="_blank" rel="noopener noreferrer"
-                  className="social-link">
-                  <FaGlobe size={20} />
-                </a>
-              )}
-            </div>
-          </Col>
-        </Row>
+        </Row> */}
 
         {/* CTA Buttons */}
-        <Row className="justify-content-center mb-5">
-          <Col lg={8} className="text-center">
-            <div className="d-flex flex-column flex-md-row gap-3 justify-content-center">
+        {/* <Row className="justify-content-center mb-4 mb-md-5">
+          <Col lg={8}>
+            <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
               <Button
                 href={`mailto:${profile?.email || "deepakchitravel@gmail.com"}`}
                 size="lg"
-                className="cta-btn cta-btn-primary"
+                className="cta-btn cta-btn-primary w-100 w-sm-auto"
                 style={{
                   background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   border: "none",
                   borderRadius: "50px",
-                  padding: "14px 32px",
+                  padding: "12px 28px",
                   fontWeight: "600",
+                  fontSize: "0.95rem",
                   boxShadow: "0 10px 25px rgba(102, 126, 234, 0.3)"
                 }}
               >
@@ -204,11 +140,12 @@ function Contact({ profile }) {
                 target="_blank"
                 variant="outline-primary"
                 size="lg"
-                className="cta-btn cta-btn-outline"
+                className="cta-btn cta-btn-outline w-100 w-sm-auto"
                 style={{
                   borderRadius: "50px",
-                  padding: "14px 32px",
+                  padding: "12px 28px",
                   fontWeight: "600",
+                  fontSize: "0.95rem",
                   border: "2px solid #667eea",
                   color: "#667eea"
                 }}
@@ -218,10 +155,10 @@ function Contact({ profile }) {
               </Button>
             </div>
           </Col>
-        </Row>
+        </Row> */}
 
         {/* Contact Form */}
-        <Row className="mt-4">
+        <Row className="mt-3 mt-md-4">
           <Col lg={10} className="mx-auto">
             <ContactForm profile={profile} />
           </Col>
@@ -245,54 +182,56 @@ function Contact({ profile }) {
       </Container>
 
       <style jsx="true">{`
-        .contact-card {
-          transition: all 0.3s ease;
-        }
-        .contact-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
-        }
-        .icon-wrapper {
-          width: 70px;
-          height: 70px;
-          background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-          border-radius: 20px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto;
-          color: #667eea;
-        }
         .social-link {
-          width: 48px;
-          height: 48px;
+          width: 44px;
+          height: 44px;
           background: white;
-          border-radius: 16px;
-          display: flex;
+          border-radius: 12px;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
           color: #475569;
           transition: all 0.3s ease;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          text-decoration: none;
         }
+        
+        @media (max-width: 576px) {
+          .social-link {
+            width: 40px;
+            height: 40px;
+          }
+        }
+        
         .social-link:hover {
           transform: translateY(-4px);
           color: #667eea;
           box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
         }
+        
         .cta-btn {
           transition: all 0.3s ease;
         }
+        
         .cta-btn:hover {
           transform: translateY(-2px);
         }
+        
         .cta-btn-primary:hover {
           box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4) !important;
         }
+        
         .cta-btn-outline:hover {
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
           color: white !important;
           border-color: transparent !important;
+        }
+        
+        @media (max-width: 768px) {
+          .cta-btn {
+            padding: 10px 20px !important;
+            font-size: 0.9rem !important;
+          }
         }
       `}</style>
     </section>
@@ -310,7 +249,6 @@ function ContactForm({ profile }) {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
-
   const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
@@ -351,7 +289,6 @@ function ContactForm({ profile }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: "" });
     }
@@ -368,7 +305,6 @@ function ContactForm({ profile }) {
     setLoading(true);
 
     try {
-      // Send to backend API
       const payload = {
         ...form,
         to: profile?.email || "deepakchitravel@gmail.com",
@@ -380,19 +316,15 @@ function ContactForm({ profile }) {
       if (response.success) {
         setSubmitted(true);
         toast.success("🎉 Message sent successfully! I'll get back to you soon.");
-
         setForm({ name: "", email: "", subject: "", message: "" });
         setErrors({});
-
-        // 🔥 START 3 MIN COOLDOWN
         setCooldown(180);
       } else {
         throw new Error(response.message || "Failed to send message");
       }
     } catch (error) {
       console.error("Contact form error:", error);
-
-      toast.error("❌ Failed to send message. Try again later.");
+      toast.error("❌ Failed to send message. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -400,7 +332,7 @@ function ContactForm({ profile }) {
 
   if (submitted) {
     return (
-      <div className="bg-white shadow-sm rounded-4 p-5 text-center" style={{
+      <div className="bg-white shadow-sm rounded-4 p-4 p-md-5 text-center" style={{
         borderRadius: "24px",
         background: "linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)"
       }}>
@@ -410,15 +342,18 @@ function ContactForm({ profile }) {
             <FaCheckCircle size={48} style={{ color: "#10b981" }} />
           </div>
         </div>
-        <h4 className="fw-bold mb-3" style={{ color: "#1e293b" }}>Thank You for Reaching Out!</h4>
-        <p className="text-secondary mb-4">
+        <h4 className="fw-bold mb-3" style={{ color: "#1e293b", fontSize: "clamp(1.25rem, 5vw, 1.5rem)" }}>
+          Thank You for Reaching Out!
+        </h4>
+        <p className="text-secondary mb-4" style={{ fontSize: "0.95rem" }}>
           Your message has been successfully sent. I'll get back to you as soon as possible.
         </p>
         <Button
           variant="outline-primary"
           onClick={() => setSubmitted(false)}
-          style={{ borderRadius: "50px", padding: "10px 24px" }}
+          style={{ borderRadius: "50px", padding: "10px 24px", fontSize: "0.9rem" }}
         >
+          <FaRegSmile className="me-2" />
           Send Another Message
         </Button>
       </div>
@@ -426,30 +361,29 @@ function ContactForm({ profile }) {
   }
 
   return (
-    <div className="bg-white shadow-lg rounded-4 p-4 p-md-5" style={{
+    <div className="bg-white shadow-lg rounded-4 p-3 p-md-4 p-lg-5" style={{
       borderRadius: "24px",
       background: "linear-gradient(135deg, #ffffff 0%, #fafbfc 100%)",
       border: "1px solid rgba(102, 126, 234, 0.1)"
     }}>
-      <div className="d-flex align-items-center gap-3 mb-4">
+      <div className="d-flex align-items-center gap-3 mb-4 flex-wrap">
         <div className="p-3 rounded-3" style={{ background: "linear-gradient(135deg, #667eea15 0%, #764ba215 100%)" }}>
           <FaPaperPlane size={20} style={{ color: "#667eea" }} />
         </div>
         <div>
-          <h5 className="fw-bold mb-0" style={{ color: "#1e293b" }}>Send a Message</h5>
+          <h5 className="fw-bold mb-0" style={{ color: "#1e293b", fontSize: "clamp(1rem, 4vw, 1.25rem)" }}>
+            Send a Message
+          </h5>
           <p className="text-muted small mb-0">Fill out the form below and I'll get back to you shortly</p>
         </div>
       </div>
 
       <Form onSubmit={handleSubmit}>
-        <Row className="g-4">
-          <Col md={6}>
+        <Row className="g-3 g-md-4">
+          <Col xs={12} md={6}>
             <Form.Group>
-              <Form.Label className="fw-semibold small text-secondary">Full Name *</Form.Label>
-              <InputGroup style={{
-                borderRadius: "12px",
-                boxShadow: errors.name ? "0 0 0 2px rgba(239, 68, 68, 0.1)" : "none"
-              }}>
+              <Form.Label className="fw-semibold small text-secondary mb-2">Full Name *</Form.Label>
+              <InputGroup style={{ borderRadius: "12px" }}>
                 <InputGroup.Text style={{
                   background: "#f8fafc",
                   border: errors.name ? "1px solid #ef4444" : "1px solid #e2e8f0",
@@ -468,24 +402,21 @@ function ContactForm({ profile }) {
                     border: errors.name ? "1px solid #ef4444" : "1px solid #e2e8f0",
                     borderLeft: "none",
                     borderRadius: "0 12px 12px 0",
-                    padding: "12px 16px",
+                    padding: "10px 16px",
                     fontSize: "0.95rem"
                   }}
                 />
               </InputGroup>
               {errors.name && (
-                <Form.Text className="text-danger small">{errors.name}</Form.Text>
+                <Form.Text className="text-danger small d-block mt-1">{errors.name}</Form.Text>
               )}
             </Form.Group>
           </Col>
 
-          <Col md={6}>
+          <Col xs={12} md={6}>
             <Form.Group>
-              <Form.Label className="fw-semibold small text-secondary">Email Address *</Form.Label>
-              <InputGroup style={{
-                borderRadius: "12px",
-                boxShadow: errors.email ? "0 0 0 2px rgba(239, 68, 68, 0.1)" : "none"
-              }}>
+              <Form.Label className="fw-semibold small text-secondary mb-2">Email Address *</Form.Label>
+              <InputGroup style={{ borderRadius: "12px" }}>
                 <InputGroup.Text style={{
                   background: "#f8fafc",
                   border: errors.email ? "1px solid #ef4444" : "1px solid #e2e8f0",
@@ -505,20 +436,20 @@ function ContactForm({ profile }) {
                     border: errors.email ? "1px solid #ef4444" : "1px solid #e2e8f0",
                     borderLeft: "none",
                     borderRadius: "0 12px 12px 0",
-                    padding: "12px 16px",
+                    padding: "10px 16px",
                     fontSize: "0.95rem"
                   }}
                 />
               </InputGroup>
               {errors.email && (
-                <Form.Text className="text-danger small">{errors.email}</Form.Text>
+                <Form.Text className="text-danger small d-block mt-1">{errors.email}</Form.Text>
               )}
             </Form.Group>
           </Col>
 
           <Col xs={12}>
             <Form.Group>
-              <Form.Label className="fw-semibold small text-secondary">Subject (Optional)</Form.Label>
+              <Form.Label className="fw-semibold small text-secondary mb-2">Subject (Optional)</Form.Label>
               <InputGroup style={{ borderRadius: "12px" }}>
                 <InputGroup.Text style={{
                   background: "#f8fafc",
@@ -526,7 +457,7 @@ function ContactForm({ profile }) {
                   borderRight: "none",
                   borderRadius: "12px 0 0 12px"
                 }}>
-                  <FaBuilding size={14} className="text-muted" />
+                  <FaComment size={14} className="text-muted" />
                 </InputGroup.Text>
                 <Form.Control
                   name="subject"
@@ -537,7 +468,7 @@ function ContactForm({ profile }) {
                     border: "1px solid #e2e8f0",
                     borderLeft: "none",
                     borderRadius: "0 12px 12px 0",
-                    padding: "12px 16px",
+                    padding: "10px 16px",
                     fontSize: "0.95rem"
                   }}
                 />
@@ -547,11 +478,8 @@ function ContactForm({ profile }) {
 
           <Col xs={12}>
             <Form.Group>
-              <Form.Label className="fw-semibold small text-secondary">Message *</Form.Label>
-              <InputGroup style={{
-                borderRadius: "12px",
-                boxShadow: errors.message ? "0 0 0 2px rgba(239, 68, 68, 0.1)" : "none"
-              }}>
+              <Form.Label className="fw-semibold small text-secondary mb-2">Message *</Form.Label>
+              <InputGroup style={{ borderRadius: "12px" }}>
                 <InputGroup.Text style={{
                   background: "#f8fafc",
                   border: errors.message ? "1px solid #ef4444" : "1px solid #e2e8f0",
@@ -580,7 +508,7 @@ function ContactForm({ profile }) {
                   }}
                 />
               </InputGroup>
-              <div className="d-flex justify-content-between mt-1">
+              <div className="d-flex justify-content-between mt-1 flex-wrap">
                 {errors.message && (
                   <Form.Text className="text-danger small">{errors.message}</Form.Text>
                 )}
@@ -601,7 +529,7 @@ function ContactForm({ profile }) {
                 border: "none",
                 borderRadius: "12px",
                 fontWeight: "600",
-                fontSize: "1rem",
+                fontSize: "0.95rem",
                 boxShadow: "0 10px 25px rgba(102, 126, 234, 0.3)",
                 transition: "all 0.3s ease"
               }}
@@ -614,23 +542,23 @@ function ContactForm({ profile }) {
                 e.currentTarget.style.boxShadow = "0 10px 25px rgba(102, 126, 234, 0.3)";
               }}
             >
-         {loading ? (
-  <>
-    <Spinner animation="border" size="sm" />
-    Sending...
-  </>
-) : cooldown > 0 ? (
-  <>
-    <FaClock />
-    Wait {Math.floor(cooldown / 60)}:
-    {String(cooldown % 60).padStart(2, "0")}
-  </>
-) : (
-  <>
-    <FaPaperPlane />
-    Send Message
-  </>
-)}
+              {loading ? (
+                <>
+                  <Spinner animation="border" size="sm" />
+                  Sending...
+                </>
+              ) : cooldown > 0 ? (
+                <>
+                  <FaClock />
+                  Wait {Math.floor(cooldown / 60)}:
+                  {String(cooldown % 60).padStart(2, "0")}
+                </>
+              ) : (
+                <>
+                  <FaPaperPlane />
+                  Send Message
+                </>
+              )}
             </Button>
             <p className="text-center text-muted small mt-3 mb-0">
               <FaClock className="me-1" size={12} />
